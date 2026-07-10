@@ -30,6 +30,11 @@
     </ion-item>
 
     <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.city' | translate }}</ion-label>
+      <ion-input type="text" [ngModel]="city()" (ngModelChange)="city.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
       <ion-label position="stacked">{{ 'destinationForm.country' | translate }}</ion-label>
       <app-country-picker
         [value]="countryCode()"
@@ -38,27 +43,15 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">{{ 'destinationForm.city' | translate }}</ion-label>
-      <ion-input type="text" [ngModel]="city()" (ngModelChange)="city.set($event)"></ion-input>
+      <ion-label position="stacked">{{ 'destinationForm.dates' | translate }}</ion-label>
+      <app-date-range-picker
+        [start]="arrival()"
+        [end]="departure()"
+        (rangeChange)="onDatesChange($event)"
+      ></app-date-range-picker>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">{{ 'destinationForm.arrival' | translate }}</ion-label>
-      <ion-input
-        type="date"
-        [ngModel]="arrival()"
-        (ngModelChange)="arrival.set($event)"
-      ></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'destinationForm.departure' | translate }}</ion-label>
-      <ion-input
-        type="date"
-        [ngModel]="departure()"
-        (ngModelChange)="departure.set($event)"
-      ></ion-input>
-    </ion-item>
+    <h2 class="app-section-title">{{ 'destinationForm.moreDetails' | translate }}</h2>
 
     <ion-item>
       <ion-label position="stacked">{{ 'destinationForm.latitude' | translate }}</ion-label>

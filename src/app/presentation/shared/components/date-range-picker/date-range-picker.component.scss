@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+.date-range-picker {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  font: inherit;
+  color: var(--app-on-surface);
+  cursor: pointer;
+  text-align: start;
+}
+
+.date-range-picker__value {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.date-range-picker__value--placeholder {
+  color: var(--app-on-surface-faint);
+}
+
+.date-range-picker__modal {
+  padding: 0.75rem 1rem 1.25rem;
+}
+
+.date-range-picker__month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0 0.75rem;
+}
+
+.date-range-picker__month-title {
+  margin: 0;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.date-range-picker__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  color: var(--app-on-surface);
+  cursor: pointer;
+
+  &:active {
+    background: var(--app-surface-muted);
+  }
+}
+
+.date-range-picker__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  color: var(--app-on-surface-muted);
+  font-size: 0.75rem;
+  padding-bottom: 0.25rem;
+}
+
+.date-range-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.date-range-picker__day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  background: transparent;
+  border: none;
+  color: var(--app-on-surface);
+  font: inherit;
+  cursor: pointer;
+
+  &.date-range-picker__day--muted {
+    color: var(--app-on-surface-faint);
+  }
+
+  &.day--in-range {
+    background: var(--app-surface-muted);
+  }
+
+  &.day--start,
+  &.day--end {
+    background: var(--app-color-primary);
+    color: #fff;
+  }
+
+  &.day--today:not(.day--start):not(.day--end) {
+    box-shadow: inset 0 0 0 1.5px var(--app-color-primary);
+  }
+}
+
+.date-range-picker__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+}
+
+.date-range-picker__confirm-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

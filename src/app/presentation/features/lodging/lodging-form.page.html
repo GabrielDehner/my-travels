@@ -39,65 +39,12 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.phone' | translate }}</ion-label>
-      <ion-input type="tel" [ngModel]="phone()" (ngModelChange)="phone.set($event)"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.email' | translate }}</ion-label>
-      <ion-input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.website' | translate }}</ion-label>
-      <ion-input type="url" [ngModel]="web()" (ngModelChange)="web.set($event)"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.checkIn' | translate }}</ion-label>
-      <ion-input
-        type="date"
-        [ngModel]="checkIn()"
-        (ngModelChange)="checkIn.set($event)"
-      ></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.checkOut' | translate }}</ion-label>
-      <ion-input
-        type="date"
-        [ngModel]="checkOut()"
-        (ngModelChange)="checkOut.set($event)"
-      ></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.confirmationCode' | translate }}</ion-label>
-      <ion-input
-        type="text"
-        [ngModel]="confirmationCode()"
-        (ngModelChange)="confirmationCode.set($event)"
-      ></ion-input>
-    </ion-item>
-
-    <h2 class="app-section-title">{{ 'lodgingForm.location' | translate }}</h2>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.latitude' | translate }}</ion-label>
-      <ion-input
-        type="number"
-        [ngModel]="latitude()"
-        (ngModelChange)="latitude.set($event)"
-      ></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'lodgingForm.longitude' | translate }}</ion-label>
-      <ion-input
-        type="number"
-        [ngModel]="longitude()"
-        (ngModelChange)="longitude.set($event)"
-      ></ion-input>
+      <ion-label position="stacked">{{ 'lodgingForm.dates' | translate }}</ion-label>
+      <app-date-range-picker
+        [start]="checkIn()"
+        [end]="checkOut()"
+        (rangeChange)="onDatesChange($event)"
+      ></app-date-range-picker>
     </ion-item>
 
     <ion-item>
@@ -154,6 +101,50 @@
         </ion-button>
       </ion-item>
     }
+
+    <h2 class="app-section-title">{{ 'lodgingForm.moreDetails' | translate }}</h2>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.phone' | translate }}</ion-label>
+      <ion-input type="tel" [ngModel]="phone()" (ngModelChange)="phone.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.email' | translate }}</ion-label>
+      <ion-input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.website' | translate }}</ion-label>
+      <ion-input type="url" [ngModel]="web()" (ngModelChange)="web.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.confirmationCode' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="confirmationCode()"
+        (ngModelChange)="confirmationCode.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.latitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="latitude()"
+        (ngModelChange)="latitude.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.longitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="longitude()"
+        (ngModelChange)="longitude.set($event)"
+      ></ion-input>
+    </ion-item>
 
     <ion-item>
       <ion-label position="stacked">{{ 'lodgingForm.price' | translate }}</ion-label>

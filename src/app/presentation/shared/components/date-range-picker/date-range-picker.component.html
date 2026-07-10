@@ -1,0 +1,83 @@
+<button
+  type="button"
+  class="date-range-picker"
+  (click)="open()"
+  [attr.aria-label]="'dateRangePicker.fieldLabel' | translate"
+>
+  <span
+    class="date-range-picker__value"
+    [class.date-range-picker__value--placeholder]="!summaryLabel()"
+  >
+    {{ summaryLabel() || placeholder() }}
+  </span>
+</button>
+
+<ion-modal [isOpen]="isOpen()" (didDismiss)="close()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ 'dateRangePicker.title' | translate }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="close()">{{ 'common.cancel' | translate }}</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <div class="date-range-picker__modal">
+        <div class="date-range-picker__month-nav">
+          <button
+            type="button"
+            class="date-range-picker__nav-btn"
+            (click)="prevMonth()"
+            [attr.aria-label]="'dateRangePicker.previousMonth' | translate"
+          >
+            <ion-icon name="chevron-back" aria-hidden="true"></ion-icon>
+          </button>
+          <p class="date-range-picker__month-title">{{ monthTitle() }}</p>
+          <button
+            type="button"
+            class="date-range-picker__nav-btn"
+            (click)="nextMonth()"
+            [attr.aria-label]="'dateRangePicker.nextMonth' | translate"
+          >
+            <ion-icon name="chevron-forward" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+
+        <div class="date-range-picker__weekdays" role="row">
+          @for (label of weekdayLabels(); track $index) {
+            <span class="date-range-picker__weekday">{{ label }}</span>
+          }
+        </div>
+
+        <div class="date-range-picker__grid" role="grid">
+          @for (cell of monthGrid(); track cell.date) {
+            <button
+              type="button"
+              class="date-range-picker__day"
+              [class.date-range-picker__day--muted]="!cell.inCurrentMonth"
+              [ngClass]="dayClass(cell.date)"
+              (click)="onDayTap(cell.date)"
+            >
+              {{ cell.day }}
+            </button>
+          }
+        </div>
+
+        <div class="date-range-picker__actions">
+          <ion-button fill="clear" (click)="goToday()">
+            {{ 'dateRangePicker.today' | translate }}
+          </ion-button>
+          <div class="date-range-picker__confirm-group">
+            <ion-button fill="clear" (click)="close()">
+              {{ 'common.cancel' | translate }}
+            </ion-button>
+            <ion-button (click)="confirm()">
+              {{ 'dateRangePicker.confirm' | translate }}
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

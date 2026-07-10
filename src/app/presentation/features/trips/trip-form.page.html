@@ -19,6 +19,33 @@
       <p class="error">{{ error }}</p>
     }
 
+    <!-- Essentials — the only fields a traveler really needs to start
+         (priority order: Name -> Dates). -->
+    <div class="app-card">
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.name' | translate }}</ion-label>
+        <ion-input
+          type="text"
+          [ngModel]="title()"
+          (ngModelChange)="title.set($event)"
+          [placeholder]="'tripForm.namePlaceholder' | translate"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.dates' | translate }}</ion-label>
+        <app-date-range-picker
+          [start]="startDate()"
+          [end]="endDate()"
+          (rangeChange)="onDatesChange($event)"
+        ></app-date-range-picker>
+      </ion-item>
+    </div>
+
+    <!-- More details — cover photo, color, status, description, notes. Kept
+         below the essentials so Name + Dates stay the clear primary focus. -->
+    <h2 class="app-section-title">{{ 'tripForm.moreDetails' | translate }}</h2>
+
     <!-- Cover photo — single obvious "add photo" affordance. Optional; falls
          back to the color-gradient cover when no photo is chosen. -->
     <div class="app-card cover-picker">
@@ -45,40 +72,6 @@
       />
     </div>
 
-    <!-- Essentials — the only fields a traveler really needs to start (design's
-         "minimum required fields" rule: Name + dates). -->
-    <div class="app-card">
-      <ion-item lines="none">
-        <ion-label position="stacked">{{ 'tripForm.name' | translate }}</ion-label>
-        <ion-input
-          type="text"
-          [ngModel]="title()"
-          (ngModelChange)="title.set($event)"
-          [placeholder]="'tripForm.namePlaceholder' | translate"
-        ></ion-input>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-label position="stacked">{{ 'tripForm.startDate' | translate }}</ion-label>
-        <ion-input
-          type="date"
-          [ngModel]="startDate()"
-          (ngModelChange)="startDate.set($event)"
-        ></ion-input>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-label position="stacked">{{ 'tripForm.endDate' | translate }}</ion-label>
-        <ion-input
-          type="date"
-          [ngModel]="endDate()"
-          (ngModelChange)="endDate.set($event)"
-        ></ion-input>
-      </ion-item>
-    </div>
-
-    <!-- More details — optional, grouped so the essentials above stay the
-         clear primary focus of the screen. -->
     <div class="app-card">
       <p class="app-text-label color-label">{{ 'tripForm.colorLabel' | translate }}</p>
       <div class="color-swatches" role="group" [attr.aria-label]="'tripForm.colorLabel' | translate">

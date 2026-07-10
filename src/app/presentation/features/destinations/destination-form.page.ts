@@ -19,6 +19,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DestinationService } from '../../../application/services/destination.service';
 import type { Destination } from '../../../domain/entities/destination';
 import { CountryPickerComponent } from '../../shared/components/country-picker/country-picker.component';
+import { DateRangePickerComponent } from '../../shared/components/date-range-picker/date-range-picker.component';
 import { findCountry } from '../../shared/data/countries.data';
 import { resolveTripId } from '../../shared/utils/trip-route.util';
 
@@ -46,6 +47,7 @@ import { resolveTripId } from '../../shared/utils/trip-route.util';
     IonInput,
     IonTextarea,
     CountryPickerComponent,
+    DateRangePickerComponent,
     TranslatePipe,
   ],
 })
@@ -73,6 +75,12 @@ export class DestinationFormPage implements OnInit {
   protected readonly formError = signal<string | null>(null);
 
   private editingDestination: Destination | null = null;
+
+  /** Applies a confirmed range from the date-range picker to both date signals at once. */
+  protected onDatesChange(range: { start: string; end: string }): void {
+    this.arrival.set(range.start);
+    this.departure.set(range.end);
+  }
 
   async ngOnInit(): Promise<void> {
     // Robust nearest-ancestor resolution (fix — see trip-route.util.ts).

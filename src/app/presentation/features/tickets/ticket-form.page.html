@@ -90,6 +90,19 @@
     }
 
     <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.mapsUrl' | translate }}</ion-label>
+      <ion-input
+        type="url"
+        [ngModel]="mapsUrl()"
+        (ngModelChange)="mapsUrl.set($event)"
+        [placeholder]="'ticketForm.mapsUrlPlaceholder' | translate"
+      ></ion-input>
+      <p class="app-text-caption">{{ 'ticketForm.mapsUrlHint' | translate }}</p>
+    </ion-item>
+
+    <h2 class="app-section-title">{{ 'ticketForm.moreDetails' | translate }}</h2>
+
+    <ion-item>
       <ion-label position="stacked">{{ 'ticketForm.company' | translate }}</ion-label>
       <ion-input type="text" [ngModel]="company()" (ngModelChange)="company.set($event)"></ion-input>
     </ion-item>
@@ -149,17 +162,6 @@
         [ngModel]="terminalLongitude()"
         (ngModelChange)="terminalLongitude.set($event)"
       ></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">{{ 'ticketForm.mapsUrl' | translate }}</ion-label>
-      <ion-input
-        type="url"
-        [ngModel]="mapsUrl()"
-        (ngModelChange)="mapsUrl.set($event)"
-        [placeholder]="'ticketForm.mapsUrlPlaceholder' | translate"
-      ></ion-input>
-      <p class="app-text-caption">{{ 'ticketForm.mapsUrlHint' | translate }}</p>
     </ion-item>
 
     <ion-item>

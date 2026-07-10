@@ -25,6 +25,7 @@ import { TravelService } from '../../../application/services/travel.service';
 import type { Travel } from '../../../domain/entities/travel';
 import type { TravelStatus } from '../../../domain/enums/travel-status';
 import { createDateRange } from '../../../domain/value-objects/date-range';
+import { DateRangePickerComponent } from '../../shared/components/date-range-picker/date-range-picker.component';
 import { FALLBACK_PALETTE, tripCoverGradient } from '../../shared/utils/trip-color.util';
 
 const TRAVEL_STATUSES: TravelStatus[] = [
@@ -60,6 +61,7 @@ const TRAVEL_STATUSES: TravelStatus[] = [
     IonSelect,
     IonSelectOption,
     IonIcon,
+    DateRangePickerComponent,
     TranslatePipe,
   ],
 })
@@ -141,6 +143,12 @@ export class TripFormPage implements OnInit {
   protected readonly coverPreviewUrl = signal<string | null>(null);
   /** Existing cover photo preview when editing a trip that already has one. */
   protected readonly existingCoverUrl = signal<string | null>(null);
+
+  /** Applies a confirmed range from the date-range picker to both date signals at once. */
+  protected onDatesChange(range: { start: string; end: string }): void {
+    this.startDate.set(range.start);
+    this.endDate.set(range.end);
+  }
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');

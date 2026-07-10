@@ -27,6 +27,7 @@ import type { Hotel } from '../../../domain/entities/hotel';
 import type { TravelDocument } from '../../../domain/entities/travel-document';
 import type { Currency } from '../../../domain/enums/currency';
 import { createMoney } from '../../../domain/value-objects/money';
+import { DateRangePickerComponent } from '../../shared/components/date-range-picker/date-range-picker.component';
 import { resolveTripId } from '../../shared/utils/trip-route.util';
 
 const CURRENCIES: Currency[] = [
@@ -78,6 +79,7 @@ const CURRENCIES: Currency[] = [
     IonSelect,
     IonSelectOption,
     IonIcon,
+    DateRangePickerComponent,
     TranslatePipe,
   ],
 })
@@ -128,6 +130,12 @@ export class LodgingFormPage implements OnInit {
   protected readonly formError = signal<string | null>(null);
 
   private editingHotel: Hotel | null = null;
+
+  /** Applies a confirmed range from the date-range picker to both date signals at once. */
+  protected onDatesChange(range: { start: string; end: string }): void {
+    this.checkIn.set(range.start);
+    this.checkOut.set(range.end);
+  }
 
   constructor() {
     addIcons({ cloudUploadOutline, documentAttachOutline, trashOutline });
