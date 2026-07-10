@@ -10,7 +10,9 @@
     "close": "Close",
     "durationDay": "{{count}} day",
     "durationDays": "{{count}} days",
-    "getDirections": "Get directions"
+    "getDirections": "Get directions",
+    "updateAvailable": "A new version is available.",
+    "update": "Update"
   },
   "tabs": {
     "today": "Today",
@@ -318,6 +320,9 @@
     "chooseTripToExport": "Choose a trip to export.",
     "exportFailed": "Export failed.",
     "exportedSuccess": "Exported \"{{title}}\" successfully.",
+    "shareTitle": "Trip export",
+    "shareText": "Here is my trip \"{{title}}\" as a .zip file.",
+    "sharedSuccess": "Shared \"{{title}}\" successfully.",
     "importFailed": "Import failed.",
     "importedSuccess": "Trip imported successfully."
   },

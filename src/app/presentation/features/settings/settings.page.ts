@@ -23,16 +23,22 @@ import type { AppLanguage } from '../../../core/config/language';
 import { LanguageService } from '../../../core/config/language.service';
 import { ThemeService } from '../../../core/config/theme.service';
 import { StorageQuotaService } from '../../../infrastructure/persistence/storage-quota.service';
+import { canShareFile, isShareAbortError } from '../../shared/utils/web-share.util';
 
 /**
  * Settings — theme preference (task 7.3, real light/dark/system switching
  * via `ThemeService`, persisted in localStorage), storage/quota display with
  * a warn state above 80% usage (task 7.5 polish), and the Export/Import
  * trip UI over the `TripArchiveFacade` (design §5, §9, §10, §13). Export
- * triggers a browser download of the ZIP `Blob` via an anchor `download`;
- * import reconstructs a trip from a picked `.zip` file with regenerated
- * UUIDs. Native file inputs are visually hidden and triggered by styled
- * `ion-button`s (task 7.2 — no raw file-input controls shown to the user).
+ * prefers the OS share sheet (Web Share API with files — WhatsApp, mail,
+ * AirDrop, etc.) when the platform supports sharing the ZIP `File`, and
+ * falls back to the existing anchor `download` behavior otherwise (desktop
+ * Chrome, or any browser without `navigator.canShare`/`navigator.share`).
+ * The user cancelling the native share sheet (`AbortError`) is a normal,
+ * silent outcome — no error is shown. Import reconstructs a trip from a
+ * picked `.zip` file with regenerated UUIDs. Native file inputs are visually
+ * hidden and triggered by styled `ion-button`s (task 7.2 — no raw file-input
+ * controls shown to the user).
  */
 @Component({
   selector: 'app-settings',
@@ -125,9 +131,33 @@ export class SettingsPage implements OnInit {
     }
 
     const trip = this.travelService.trips().find((t) => t.id === tripId);
+    const title = trip?.title ?? tripId;
     const fileName = `trip-${trip ? this.slugify(trip.title) : tripId}.zip`;
+    const file = new File([blob], fileName, { type: 'application/zip' });
 
-    const url = URL.createObjectURL(blob);
+    if (canShareFile(navigator, file)) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: this.translate.instant('settings.shareTitle'),
+          text: this.translate.instant('settings.shareText', { title }),
+        });
+        this.exportStatus.set(this.translate.instant('settings.sharedSuccess', { title }));
+        return;
+      } catch (err) {
+        // The user cancelling the native share sheet is a normal outcome —
+        // stay silent rather than showing an error. Any other failure falls
+        // through to the anchor-download fallback below.
+        if (isShareAbortError(err)) return;
+      }
+    }
+
+    this.downloadFile(file, fileName);
+    this.exportStatus.set(this.translate.instant('settings.exportedSuccess', { title }));
+  }
+
+  private downloadFile(file: File, fileName: string): void {
+    const url = URL.createObjectURL(file);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = fileName;
@@ -137,10 +167,6 @@ export class SettingsPage implements OnInit {
     // at the moment click() returns, so an immediate revoke can corrupt
     // the download (design §9 still requires eventual revocation).
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-    this.exportStatus.set(
-      this.translate.instant('settings.exportedSuccess', { title: trip?.title ?? tripId }),
-    );
   }
 
   async onImportFileSelected(event: Event): Promise<void> {

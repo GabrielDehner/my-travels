@@ -10,7 +10,9 @@
     "close": "Cerrar",
     "durationDay": "{{count}} día",
     "durationDays": "{{count}} días",
-    "getDirections": "Cómo llegar"
+    "getDirections": "Cómo llegar",
+    "updateAvailable": "Hay una nueva versión disponible.",
+    "update": "Actualizar"
   },
   "tabs": {
     "today": "Hoy",
@@ -318,6 +320,9 @@
     "chooseTripToExport": "Elige un viaje para exportar.",
     "exportFailed": "Error al exportar.",
     "exportedSuccess": "\"{{title}}\" se exportó correctamente.",
+    "shareTitle": "Exportación de viaje",
+    "shareText": "Aquí está mi viaje \"{{title}}\" en un archivo .zip.",
+    "sharedSuccess": "\"{{title}}\" se compartió correctamente.",
     "importFailed": "Error al importar.",
     "importedSuccess": "Viaje importado correctamente."
   },
