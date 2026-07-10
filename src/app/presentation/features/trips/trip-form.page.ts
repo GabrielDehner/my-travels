@@ -94,6 +94,23 @@ export class TripFormPage implements OnInit {
     }));
   });
 
+  /**
+   * Explicit collapsed-display text for the `ion-select`. Ionic's own
+   * collapsed-text rendering reads the slotted `ion-select-option` text
+   * ONLY at its own render time — on a cold load (translations not yet
+   * loaded from the JSON file) it can capture the raw key and never
+   * re-render when the option text updates afterward, since Angular
+   * mutating slotted light-DOM text does not trigger a Stencil re-render.
+   * Binding `[selectedText]` bypasses that entirely: Ionic uses this value
+   * directly, and Stencil re-renders whenever this `@Prop` changes — so it
+   * stays correct on cold load AND re-translates on language switch. Same
+   * fix already applied to ticket-form's `selectedTypeLabel`.
+   */
+  protected readonly selectedStatusLabel = computed(() => {
+    const current = this.status();
+    return this.statusOptions().find((option) => option.value === current)?.label ?? '';
+  });
+
   /** Preset color chips — replaces the raw "#hex" text input (fix HIGH #2). */
   protected readonly colorSwatches = FALLBACK_PALETTE;
 

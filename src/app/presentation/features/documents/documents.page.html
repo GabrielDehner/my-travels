@@ -52,6 +52,7 @@
           <ion-select
             [ngModel]="uploadCategory()"
             (ngModelChange)="uploadCategory.set($event)"
+            [selectedText]="selectedUploadCategoryLabel()"
             interface="popover"
           >
             @for (option of categoryOptions(); track option.value) {
@@ -121,6 +122,7 @@
                   class="doc-category"
                   [ngModel]="doc.category"
                   (ngModelChange)="moveToCategory(doc, $event)"
+                  [selectedText]="categoryLabel(doc.category)"
                   interface="popover"
                 >
                   @for (option of categoryOptions(); track option.value) {

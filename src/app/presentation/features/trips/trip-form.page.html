@@ -101,7 +101,11 @@
 
       <ion-item lines="none">
         <ion-label position="stacked">{{ 'tripForm.status' | translate }}</ion-label>
-        <ion-select [ngModel]="status()" (ngModelChange)="status.set($event)">
+        <ion-select
+          [ngModel]="status()"
+          (ngModelChange)="status.set($event)"
+          [selectedText]="selectedStatusLabel()"
+        >
           @for (option of statusOptions(); track option.value) {
             <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
           }

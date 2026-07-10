@@ -103,6 +103,33 @@ export class DocumentsPage implements OnInit {
   });
 
   /**
+   * Explicit collapsed-display text for the upload-form category
+   * `ion-select`. `categoryOptions` alone only fixes the OPEN dropdown list
+   * — Ionic's own collapsed-text rendering reads the slotted
+   * `ion-select-option` text ONLY at its own render time, so on a cold load
+   * (translations not yet loaded from the JSON file) it can capture the raw
+   * key and never re-render afterward. Binding `[selectedText]` bypasses
+   * that: Ionic uses this value directly and Stencil re-renders whenever
+   * this `@Prop` changes — correct on cold load AND on language switch.
+   * Same fix already applied to ticket-form's `selectedTypeLabel` and
+   * trip-form's `selectedStatusLabel`.
+   */
+  protected readonly selectedUploadCategoryLabel = computed(() => {
+    const current = this.uploadCategory();
+    return this.categoryOptions().find((option) => option.value === current)?.label ?? '';
+  });
+
+  /**
+   * Same `[selectedText]` fix as `selectedUploadCategoryLabel`, but for the
+   * per-document "move category" `ion-select` — that one is bound to
+   * `doc.category` per rendered card rather than a single component signal,
+   * so it needs a lookup function instead of a single computed signal.
+   */
+  protected categoryLabel(category: DocumentCategory): string {
+    return this.categoryOptions().find((option) => option.value === category)?.label ?? '';
+  }
+
+  /**
    * Guards MUST-FIX #4/#3: if this page is ever reached without a resolved
    * trip id (e.g. a stale/direct link with no parent `:id` param), the
    * upload form never renders a broken, context-less flow — the traveler

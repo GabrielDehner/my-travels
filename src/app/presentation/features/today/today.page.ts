@@ -42,6 +42,7 @@ import {
   isTodayOrLater,
   todayDateOnly,
 } from '../../shared/utils/date-format.util';
+import { destinationLink } from '../../shared/utils/timeline-link.util';
 import { ticketLabel, transportMeta } from '../../shared/utils/transport-display.util';
 import { TRANSPORT_ICONS } from '../../shared/utils/transport-icon.util';
 import { tripCoverGradient } from '../../shared/utils/trip-color.util';
@@ -210,6 +211,7 @@ export class TodayPage implements OnInit {
           icon: 'location-outline',
           date: destination.arrival,
           label: this.translate.instant('today.arrive', { name: destination.name }),
+          link: destinationLink(tripId, destination.id),
           ...(country ? { meta: country } : {}),
         };
       });
@@ -220,6 +222,7 @@ export class TodayPage implements OnInit {
     const lodgingItems: TimelineItem[] = [];
     for (const hotels of hotelLists) {
       for (const hotel of hotels) {
+        const link = destinationLink(tripId, hotel.destinationId);
         if (isTodayOrLater(hotel.checkIn)) {
           lodgingItems.push({
             id: `checkin-${hotel.id}`,
@@ -227,6 +230,7 @@ export class TodayPage implements OnInit {
             icon: 'bed-outline',
             date: hotel.checkIn,
             label: this.translate.instant('today.checkIn', { name: hotel.name }),
+            link,
           });
         }
         if (isTodayOrLater(hotel.checkOut)) {
@@ -236,6 +240,7 @@ export class TodayPage implements OnInit {
             icon: 'bed-outline',
             date: hotel.checkOut,
             label: this.translate.instant('today.checkOut', { name: hotel.name }),
+            link,
           });
         }
       }
@@ -249,6 +254,7 @@ export class TodayPage implements OnInit {
       for (const transport of transports) {
         const typeLabel = this.translate.instant(`transport.types.${transport.type}`);
         const meta = transportMeta(transport);
+        const link = destinationLink(tripId, transport.destinationId);
         if (transport.departAt && isTodayOrLater(transport.departAt)) {
           transportItems.push({
             id: `depart-transport-${transport.id}`,
@@ -259,6 +265,7 @@ export class TodayPage implements OnInit {
               transport,
               this.translate.instant('today.transportDepart', { type: typeLabel }),
             ),
+            link,
             ...(meta ? { meta } : {}),
           });
         }
@@ -272,6 +279,7 @@ export class TodayPage implements OnInit {
               transport,
               this.translate.instant('today.transportArrive', { type: typeLabel }),
             ),
+            link,
             ...(meta ? { meta } : {}),
           });
         }

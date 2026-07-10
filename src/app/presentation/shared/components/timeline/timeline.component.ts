@@ -1,4 +1,6 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -14,6 +16,7 @@ import {
   carOutline,
   boatOutline,
   helpCircleOutline,
+  chevronForwardOutline,
 } from 'ionicons/icons';
 
 import { AppDatePipe } from '../../pipes/app-date.pipe';
@@ -36,6 +39,14 @@ export interface TimelineItem {
   readonly date: string;
   readonly label: string;
   readonly meta?: string;
+  /**
+   * Optional `routerLink` commands array. When present, the row renders as
+   * a real, keyboard-focusable link with a trailing chevron affordance and
+   * navigates there on tap/Enter. The component stays generic/reusable —
+   * it never builds routes itself; callers (Itinerary, Today) pass the
+   * already-resolved target (e.g. via `destinationLink()`).
+   */
+  readonly link?: readonly (string | number)[];
 }
 
 /**
@@ -47,7 +58,7 @@ export interface TimelineItem {
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [IonIcon, AppDatePipe],
+  imports: [IonIcon, AppDatePipe, RouterLink, NgTemplateOutlet],
   template: `
     <div class="app-timeline app-stagger">
       @for (item of items(); track item.id) {
@@ -55,16 +66,37 @@ export interface TimelineItem {
           <div class="app-timeline-dot" [class]="'app-category--' + item.category">
             <ion-icon [name]="item.icon" aria-hidden="true"></ion-icon>
           </div>
-          <div class="app-timeline-content">
-            <p class="app-timeline-date">{{ item.date | appDate }}</p>
-            <p class="app-timeline-label">{{ item.label }}</p>
-            @if (item.meta) {
-              <p class="app-timeline-meta">{{ item.meta }}</p>
-            }
-          </div>
+          @if (item.link) {
+            <a
+              class="app-timeline-content app-timeline-content--tappable"
+              [routerLink]="item.link"
+              [attr.aria-label]="item.label"
+            >
+              <div class="app-timeline-content__text">
+                <ng-container *ngTemplateOutlet="body; context: { item }"></ng-container>
+              </div>
+              <ion-icon
+                name="chevron-forward-outline"
+                class="app-timeline-chevron"
+                aria-hidden="true"
+              ></ion-icon>
+            </a>
+          } @else {
+            <div class="app-timeline-content">
+              <ng-container *ngTemplateOutlet="body; context: { item }"></ng-container>
+            </div>
+          }
         </div>
       }
     </div>
+
+    <ng-template #body let-item="item">
+      <p class="app-timeline-date">{{ item.date | appDate }}</p>
+      <p class="app-timeline-label">{{ item.label }}</p>
+      @if (item.meta) {
+        <p class="app-timeline-meta">{{ item.meta }}</p>
+      }
+    </ng-template>
   `,
 })
 export class TimelineComponent {
@@ -84,6 +116,7 @@ export class TimelineComponent {
       carOutline,
       boatOutline,
       helpCircleOutline,
+      chevronForwardOutline,
     });
   }
 }

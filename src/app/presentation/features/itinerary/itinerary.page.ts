@@ -14,6 +14,7 @@ import {
 } from '../../shared/components/timeline/timeline.component';
 import { AppDatePipe } from '../../shared/pipes/app-date.pipe';
 import { countryDisplayLabel } from '../../shared/utils/country-display.util';
+import { destinationLink } from '../../shared/utils/timeline-link.util';
 import { ticketLabel, transportMeta } from '../../shared/utils/transport-display.util';
 import { TRANSPORT_ICONS } from '../../shared/utils/transport-icon.util';
 import { tripId$ } from '../../shared/utils/trip-route.util';
@@ -97,12 +98,14 @@ export class ItineraryPage implements OnInit {
         destination.country,
         this.translate.currentLang(),
       );
+      const link = destinationLink(tripId, destination.id);
       items.push({
         id: `arrive-${destination.id}`,
         category: 'destination',
         icon: ICON_BY_CATEGORY.destination,
         date: destination.arrival,
         label: this.translate.instant('itinerary.arrive', { name: destination.name }),
+        link,
         ...(country ? { meta: country } : {}),
       });
       items.push({
@@ -111,6 +114,7 @@ export class ItineraryPage implements OnInit {
         icon: ICON_BY_CATEGORY.destination,
         date: destination.departure,
         label: this.translate.instant('itinerary.depart', { name: destination.name }),
+        link,
         ...(country ? { meta: country } : {}),
       });
     }
@@ -120,12 +124,14 @@ export class ItineraryPage implements OnInit {
     );
     for (const hotels of hotelLists) {
       for (const hotel of hotels) {
+        const link = destinationLink(tripId, hotel.destinationId);
         items.push({
           id: `checkin-${hotel.id}`,
           category: 'lodging',
           icon: ICON_BY_CATEGORY.lodging,
           date: hotel.checkIn,
           label: this.translate.instant('itinerary.checkIn', { name: hotel.name }),
+          link,
         });
         items.push({
           id: `checkout-${hotel.id}`,
@@ -133,6 +139,7 @@ export class ItineraryPage implements OnInit {
           icon: ICON_BY_CATEGORY.lodging,
           date: hotel.checkOut,
           label: this.translate.instant('itinerary.checkOut', { name: hotel.name }),
+          link,
         });
       }
     }
@@ -144,6 +151,7 @@ export class ItineraryPage implements OnInit {
       for (const transport of transports) {
         const typeLabel = this.translate.instant(`transport.types.${transport.type}`);
         const meta = transportMeta(transport);
+        const link = destinationLink(tripId, transport.destinationId);
         if (transport.departAt) {
           items.push({
             id: `depart-transport-${transport.id}`,
@@ -154,6 +162,7 @@ export class ItineraryPage implements OnInit {
               transport,
               this.translate.instant('itinerary.transportDepart', { type: typeLabel }),
             ),
+            link,
             ...(meta ? { meta } : {}),
           });
         }
@@ -167,6 +176,7 @@ export class ItineraryPage implements OnInit {
               transport,
               this.translate.instant('itinerary.transportArrive', { type: typeLabel }),
             ),
+            link,
             ...(meta ? { meta } : {}),
           });
         }

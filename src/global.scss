@@ -570,6 +570,43 @@ ion-action-sheet {
   color: var(--app-on-surface-muted);
 }
 
+/* Tappable timeline row (Itinerary/Today items linking to a destination's
+   place detail) — real `<a>` link, so it's keyboard-focusable and carries
+   native link semantics for free; this only adds the visual affordance. */
+.app-timeline-content--tappable {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-sm);
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    box-shadow var(--app-dur-fast) var(--app-ease-standard),
+    transform var(--app-dur-fast) var(--app-ease-standard);
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: var(--app-shadow-md);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.app-timeline-content__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-timeline-chevron {
+  flex: 0 0 auto;
+  font-size: 1.1rem;
+  color: var(--app-on-surface-muted);
+}
+
 /* Category accent color modifiers, reused by the timeline dot + chips. */
 .app-category--destination {
   background: var(--app-category-destination);
