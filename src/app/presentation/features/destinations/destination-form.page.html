@@ -31,16 +31,10 @@
 
     <ion-item>
       <ion-label position="stacked">{{ 'destinationForm.country' | translate }}</ion-label>
-      <ion-select
-        [ngModel]="countryCode()"
-        (ngModelChange)="countryCode.set($event)"
-        [placeholder]="'destinationForm.countryPlaceholder' | translate"
-      >
-        <ion-select-option value="">{{ 'destinationForm.countryNone' | translate }}</ion-select-option>
-        @for (option of countryOptions(); track option.code) {
-          <ion-select-option [value]="option.code">{{ option.label }}</ion-select-option>
-        }
-      </ion-select>
+      <app-country-picker
+        [value]="countryCode()"
+        (valueChange)="countryCode.set($event)"
+      ></app-country-picker>
     </ion-item>
 
     <ion-item>

@@ -1,6 +1,15 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { IonHeader, IonToolbar, IonTitle, IonIcon, IonContent, IonFab, IonFabButton } from '@ionic/angular/standalone';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonIcon,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  type ViewWillEnter,
+} from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { add, airplane } from 'ionicons/icons';
@@ -41,15 +50,15 @@ import { classifyDateRange, formatDateRange } from '../../shared/utils/date-form
     TranslatePipe,
   ],
 })
-export class TripsListPage implements OnInit {
+export class TripsListPage implements OnInit, ViewWillEnter {
   protected readonly travelService = inject(TravelService);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
   private readonly destroyRef = inject(DestroyRef);
 
-  /** Object URLs for uploaded cover photos, keyed by trip id — revoked on destroy. */
+  /** Object URLs for uploaded cover photos, keyed by trip id — revoked on destroy or refresh. */
   private readonly coverImageUrls = signal<Record<string, string>>({});
-  private readonly openedUrls: string[] = [];
+  private openedUrls: string[] = [];
 
   protected readonly loaded = signal(false);
 
@@ -82,6 +91,17 @@ export class TripsListPage implements OnInit {
     this.loaded.set(true);
   }
 
+  /**
+   * Ionic caches/reuses page instances (`IonicRouteStrategy`), so
+   * `ngOnInit` does NOT re-run on back-navigation — re-resolving cover URLs
+   * here on every (re)entry ensures a just-uploaded cover shows on the trip
+   * card without a manual reload.
+   */
+  async ionViewWillEnter(): Promise<void> {
+    if (!this.loaded()) return; // first entry: ngOnInit already loads it
+    await this.loadCoverImages();
+  }
+
   private async loadCoverImages(): Promise<void> {
     const withCovers = this.travelService.trips().filter((trip) => trip.coverImageId);
     const entries = await Promise.all(
@@ -91,7 +111,11 @@ export class TripsListPage implements OnInit {
       }),
     );
     const resolved = entries.filter((entry): entry is readonly [string, string] => !!entry);
-    for (const [, url] of resolved) this.openedUrls.push(url);
+
+    // Revoke previous object URLs before replacing the map, so repeated
+    // entries (e.g. after uploading a cover) never leak or double-create URLs.
+    for (const url of this.openedUrls) URL.revokeObjectURL(url);
+    this.openedUrls = resolved.map(([, url]) => url);
     this.coverImageUrls.set(Object.fromEntries(resolved));
   }
 

@@ -7,6 +7,7 @@
     "edit": "Edit",
     "delete": "Delete",
     "back": "Back",
+    "close": "Close",
     "durationDay": "{{count}} day",
     "durationDays": "{{count}} days",
     "getDirections": "Get directions"
@@ -119,7 +120,6 @@
     "namePlaceholder": "e.g. Kyoto",
     "country": "Country",
     "countryPlaceholder": "Choose a country",
-    "countryNone": "No country",
     "city": "City",
     "arrival": "Arrival",
     "departure": "Departure",
@@ -131,6 +131,12 @@
     "addDestination": "Add destination",
     "nameRequired": "Destination name is required.",
     "destinationNotFound": "Destination not found."
+  },
+  "countryPicker": {
+    "title": "Choose a country",
+    "searchPlaceholder": "Search country",
+    "none": "No country",
+    "noResults": "No countries match your search."
   },
   "lodging": {
     "title": "Lodging",

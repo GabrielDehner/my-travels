@@ -1,3 +1,9 @@
+/* Matches the `.hero`'s own `margin-top` so the skeleton placeholder keeps
+ * the same breathing room below the gradient header while loading. */
+.app-skeleton--hero:first-child {
+  margin-top: var(--app-space-lg);
+}
+
 .loading-state {
   display: flex;
   align-items: center;
@@ -12,6 +18,7 @@
   position: relative;
   display: block;
   min-height: 170px;
+  margin-top: var(--app-space-lg);
   padding: var(--app-space-lg) var(--app-space-md) var(--app-space-md);
   color: #ffffff;
   text-decoration: none;

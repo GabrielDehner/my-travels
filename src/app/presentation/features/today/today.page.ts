@@ -8,6 +8,7 @@ import {
   IonButton,
   IonIcon,
   IonContent,
+  type ViewWillEnter,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
@@ -81,7 +82,7 @@ const UPCOMING_LIMIT = 5;
     AppDateRangePipe,
   ],
 })
-export class TodayPage implements OnInit {
+export class TodayPage implements OnInit, ViewWillEnter {
   protected readonly travelService = inject(TravelService);
   protected readonly reminderService = inject(ReminderService);
   protected readonly checklistService = inject(ChecklistService);
@@ -172,8 +173,28 @@ export class TodayPage implements OnInit {
     this.loaded.set(true);
   }
 
+  /**
+   * Ionic caches/reuses page instances (`IonicRouteStrategy`), so
+   * `ngOnInit` does NOT re-run on back-navigation — re-resolving the cover
+   * URL here on every (re)entry ensures the hero shows a just-uploaded
+   * cover photo without a manual reload. Revokes the previous object URL
+   * before creating a new one so we never leak or double-create URLs.
+   */
+  async ionViewWillEnter(): Promise<void> {
+    if (!this.loaded()) return; // first entry: ngOnInit's Promise.all already loads it
+    const trip = this.activeTrip();
+    if (!trip) {
+      if (this.openedHeroUrl) URL.revokeObjectURL(this.openedHeroUrl);
+      this.openedHeroUrl = undefined;
+      this.heroCoverImageUrl.set(undefined);
+      return;
+    }
+    await this.loadHeroCoverImage(trip);
+  }
+
   private async loadHeroCoverImage(trip: Travel): Promise<void> {
     const url = await this.travelService.getCoverImageUrl(trip);
+    if (this.openedHeroUrl) URL.revokeObjectURL(this.openedHeroUrl);
     this.openedHeroUrl = url;
     this.heroCoverImageUrl.set(url);
   }

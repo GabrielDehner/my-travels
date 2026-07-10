@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+.country-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  font: inherit;
+  color: var(--app-on-surface);
+  cursor: pointer;
+  text-align: start;
+}
+
+.country-picker__value {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.country-picker__value--placeholder {
+  color: var(--app-on-surface-faint);
+}
+
+.country-picker__chevron {
+  flex-shrink: 0;
+  color: var(--app-on-surface-muted);
+}
+
+.country-picker__no-results {
+  color: var(--app-on-surface-muted);
+}
+
+ion-searchbar {
+  padding: 0 0.5rem 0.5rem;
+}

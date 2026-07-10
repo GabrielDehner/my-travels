@@ -7,6 +7,7 @@
     "edit": "Editar",
     "delete": "Eliminar",
     "back": "Atrás",
+    "close": "Cerrar",
     "durationDay": "{{count}} día",
     "durationDays": "{{count}} días",
     "getDirections": "Cómo llegar"
@@ -119,7 +120,6 @@
     "namePlaceholder": "p. ej. Kioto",
     "country": "País",
     "countryPlaceholder": "Elige un país",
-    "countryNone": "Sin país",
     "city": "Ciudad",
     "arrival": "Llegada",
     "departure": "Salida",
@@ -131,6 +131,12 @@
     "addDestination": "Añadir destino",
     "nameRequired": "El nombre del destino es obligatorio.",
     "destinationNotFound": "Destino no encontrado."
+  },
+  "countryPicker": {
+    "title": "Elige un país",
+    "searchPlaceholder": "Buscar país",
+    "none": "Sin país",
+    "noResults": "Ningún país coincide con tu búsqueda."
   },
   "lodging": {
     "title": "Alojamiento",

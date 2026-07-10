@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -12,16 +12,14 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonSelect,
-  IonSelectOption,
   IonTextarea,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { DestinationService } from '../../../application/services/destination.service';
 import type { Destination } from '../../../domain/entities/destination';
-import { COUNTRIES, findCountry } from '../../shared/data/countries.data';
-import { countryFlagEmoji } from '../../shared/utils/country-flag.util';
+import { CountryPickerComponent } from '../../shared/components/country-picker/country-picker.component';
+import { findCountry } from '../../shared/data/countries.data';
 import { resolveTripId } from '../../shared/utils/trip-route.util';
 
 /**
@@ -46,9 +44,8 @@ import { resolveTripId } from '../../shared/utils/trip-route.util';
     IonItem,
     IonLabel,
     IonInput,
-    IonSelect,
-    IonSelectOption,
     IonTextarea,
+    CountryPickerComponent,
     TranslatePipe,
   ],
 })
@@ -64,24 +61,6 @@ export class DestinationFormPage implements OnInit {
   /** Selected ISO alpha-2 country code, or '' for "no country". */
   protected readonly countryCode = signal('');
   protected readonly city = signal('');
-
-  /**
-   * Country picker options — flag + localized name, sorted by the current
-   * language's name so the list reads naturally either way. Pre-resolved
-   * (not translated inside `ion-select-option`) for the same reason the
-   * trip status picker pre-resolves labels: the collapsed `ion-select`
-   * display value does not re-run pipes on its option's rendered content.
-   */
-  protected readonly countryOptions = computed(() => {
-    const lang = this.translate.currentLang();
-    return [...COUNTRIES]
-      .map((country) => ({
-        code: country.code,
-        label: `${countryFlagEmoji(country.code)} ${lang === 'es' ? country.es : country.en}`,
-        name: lang === 'es' ? country.es : country.en,
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  });
   protected readonly arrival = signal(new Date().toISOString().slice(0, 10));
   protected readonly departure = signal(new Date().toISOString().slice(0, 10));
   protected readonly geoLat = signal('');
