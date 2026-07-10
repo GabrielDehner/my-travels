@@ -1,0 +1,142 @@
+// Light theme tokens.
+//
+// 2026 modern refresh (UI redesign iteration 1) — evolves the v1 TripIt
+// reskin into a full token layer: blue primary ramp, warm coral/amber
+// accent, layered neutral surfaces, semantic status colors, type scale,
+// elevation and motion tokens. Applied by default and whenever
+// `data-theme="light"` is set on <html> (see theme.service.ts).
+
+:root,
+:root[data-theme='light'] {
+  // --- Brand palette — full blue ramp ---------------------------------
+  --app-blue-50: #eef4ff;
+  --app-blue-100: #dbe6fe;
+  --app-blue-200: #b9ceff;
+  --app-blue-300: #8db0fe;
+  --app-blue-400: #5a8bfa;
+  --app-blue-500: #2f6bf0;
+  --app-blue-600: #1a56db;
+  --app-blue-700: #1544ad;
+  --app-blue-800: #153a8a;
+  --app-blue-900: #16336d;
+
+  --app-color-primary: var(--app-blue-600);
+  --app-color-primary-rgb: 26, 86, 219;
+  --app-color-primary-shade: var(--app-blue-700);
+  --app-color-primary-tint: var(--app-blue-500);
+  --app-color-primary-gradient: linear-gradient(135deg, #1a56db 0%, #2f6bf0 55%, #5a8bfa 100%);
+
+  --app-color-accent: #f5883a;
+  --app-color-accent-rgb: 245, 136, 58;
+  --app-color-accent-shade: #d9701f;
+  --app-color-accent-tint: #ff9d55;
+
+  // --- Surfaces / elevation layers -------------------------------------
+  --app-surface-page: #f2f5fb;
+  --app-surface: #ffffff;
+  --app-surface-variant: #eaeef7;
+  --app-surface-card: #ffffff;
+  --app-surface-raised: #ffffff;
+  --app-surface-muted: #eef1f8;
+  --app-surface-sunken: #e7ecf5;
+  --app-outline: #d5dcea;
+  --app-border-subtle: #e2e7f0;
+
+  --app-on-surface: #161d2b;
+  --app-on-surface-muted: #5b667a;
+  --app-on-surface-faint: #8a94a6;
+
+  // --- Semantic status colors -------------------------------------------
+  --app-success: #16a375;
+  --app-success-bg: #e4f7ef;
+  --app-warning: #e08a1e;
+  --app-warning-bg: #fdf1dc;
+  --app-danger: #dc3b45;
+  --app-danger-bg: #fdeaec;
+  --app-info: #1a56db;
+  --app-info-bg: #e9f0ff;
+
+  // --- Elevation --------------------------------------------------------
+  --app-shadow-xs: 0 1px 2px rgba(22, 29, 43, 0.05);
+  --app-shadow-sm: 0 2px 6px rgba(22, 29, 43, 0.07), 0 1px 2px rgba(22, 29, 43, 0.04);
+  --app-shadow-md: 0 6px 16px rgba(22, 29, 43, 0.09), 0 2px 6px rgba(22, 29, 43, 0.05);
+  --app-shadow-lg: 0 16px 34px rgba(22, 29, 43, 0.14), 0 6px 12px rgba(22, 29, 43, 0.07);
+
+  // --- Radius / spacing scale --------------------------------------------
+  --app-radius-sm: 10px;
+  --app-radius-md: 16px;
+  --app-radius-lg: 22px;
+  --app-radius-xl: 28px;
+  --app-radius-pill: 999px;
+
+  --app-space-xs: 4px;
+  --app-space-sm: 8px;
+  --app-space-md: 16px;
+  --app-space-lg: 24px;
+  --app-space-xl: 32px;
+  --app-space-2xl: 48px;
+  --app-space-3xl: 64px;
+
+  // --- Motion -------------------------------------------------------------
+  --app-dur-fast: 120ms;
+  --app-dur-base: 220ms;
+  --app-dur-slow: 320ms;
+  --app-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --app-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  // --- Type scale (system stack — zero added font weight) -----------------
+  --app-font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif;
+  --app-font-num: ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
+
+  // --- Category accent colors (timeline dots / icons / chips) -------------
+  --app-category-destination: #1a56db;
+  --app-category-destination-bg: #e9f0ff;
+  --app-category-lodging: #f5883a;
+  --app-category-lodging-bg: #fdeede;
+  --app-category-document: #7c5cff;
+  --app-category-document-bg: #efeafe;
+  --app-category-expense: #16a375;
+  --app-category-expense-bg: #e4f7ef;
+  --app-category-checklist: #e0578b;
+  --app-category-checklist-bg: #fce9f1;
+  --app-category-reminder: #e2444b;
+  --app-category-reminder-bg: #fdeaec;
+  --app-category-transport: #0e9db5;
+  --app-category-transport-bg: #e2f6f9;
+
+  // --- Ionic variable mapping ---------------------------------------------
+  --ion-color-primary: var(--app-color-primary);
+  --ion-color-primary-rgb: var(--app-color-primary-rgb);
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: var(--app-color-primary-shade);
+  --ion-color-primary-tint: var(--app-color-primary-tint);
+
+  --ion-color-secondary: var(--app-color-accent);
+  --ion-color-secondary-rgb: var(--app-color-accent-rgb);
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: var(--app-color-accent-shade);
+  --ion-color-secondary-tint: var(--app-color-accent-tint);
+
+  --ion-color-danger: var(--app-danger);
+  --ion-color-success: var(--app-success);
+  --ion-color-warning: var(--app-warning);
+
+  --ion-background-color: var(--app-surface-page);
+  --ion-background-color-rgb: 242, 245, 251;
+  --ion-text-color: var(--app-on-surface);
+  --ion-text-color-rgb: 22, 29, 43;
+
+  --ion-card-background: var(--app-surface-card);
+  --ion-item-background: var(--app-surface-card);
+  --ion-toolbar-background: transparent;
+  --ion-tab-bar-background: var(--app-surface-card);
+  --ion-border-color: var(--app-border-subtle);
+
+  --ion-color-step-50: #f4f6fb;
+  --ion-color-step-100: #eef1f8;
+  --ion-color-step-150: #e7ebf3;
+  --ion-color-step-200: #e2e7f0;
+}

@@ -1,0 +1,126 @@
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: var(--app-on-surface-muted);
+}
+
+.hero {
+  position: relative;
+  display: block;
+  min-height: 170px;
+  padding: var(--app-space-lg) var(--app-space-md) var(--app-space-md);
+  color: #ffffff;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.hero__cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero__chip,
+.hero__watermark,
+.hero__title,
+.hero__meta,
+.hero__dates,
+.hero__cta {
+  position: relative;
+  z-index: 1;
+}
+
+/* Scrim so text stays readable over an uploaded cover photo. */
+.hero:has(.hero__cover-img)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.1));
+  z-index: 0;
+}
+
+.hero__chip {
+  position: absolute;
+  top: var(--app-space-md);
+  right: var(--app-space-md);
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+
+.hero__watermark {
+  position: absolute;
+  right: var(--app-space-md);
+  bottom: var(--app-space-md);
+  font-size: 56px;
+  opacity: 0.18;
+}
+
+.hero__title {
+  margin: var(--app-space-lg) 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.hero__meta,
+.hero__dates {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--app-space-md);
+  padding: 0 var(--app-space-lg);
+  height: 40px;
+  background: #ffffff;
+  color: var(--app-color-primary);
+  border-radius: var(--app-radius-pill);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.reminder-line,
+.checklist-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.35rem 0;
+
+  ion-icon {
+    flex: 0 0 auto;
+    border-radius: 50%;
+    padding: 4px;
+    color: #ffffff;
+    font-size: 0.9rem;
+  }
+}
+
+.checklist-link {
+  display: inline-block;
+  margin-top: var(--app-space-sm);
+  color: var(--app-color-primary);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.quick-actions {
+  display: flex;
+  gap: var(--app-space-sm);
+  padding: var(--app-space-md);
+}
+
+.quick-actions ion-button {
+  flex: 1 1 0;
+}

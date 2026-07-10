@@ -1,0 +1,42 @@
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: var(--app-on-surface-muted);
+}
+
+.error {
+  color: var(--ion-color-danger);
+  padding: 0 1rem;
+}
+
+.hotel-card {
+  position: relative;
+  padding-right: var(--app-space-2xl);
+}
+
+.hotel-card__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  h2 {
+    margin: 0 0 var(--app-space-xs);
+  }
+}
+
+.hotel-meta {
+  margin: 2px 0;
+  color: var(--app-on-surface-muted);
+  font-size: 0.85rem;
+}
+
+.hotel-more {
+  position: absolute;
+  top: var(--app-space-xs);
+  right: var(--app-space-xs);
+}

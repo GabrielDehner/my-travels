@@ -1,0 +1,147 @@
+<!--
+  Content FRAGMENT (UI iteration 4, FIX 2): no outer `ion-content` here —
+  renders inside the parent `TripDetailPage`'s single shared `ion-content`.
+-->
+<div class="app-page-content">
+    @if (expenseService.error(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <div class="app-card app-card--raised summary">
+      <h2 class="total-line">
+        {{ 'expenses.total' | translate: { amount: formatUsd(totalApproxUsdMinor()) } }}
+      </h2>
+
+      @if (byCategory().length > 0) {
+        <h3 class="summary-subtitle">{{ 'expenses.byCategory' | translate }}</h3>
+        <ul>
+          @for (entry of byCategory(); track entry.category) {
+            <li>{{ entry.label }}: {{ formatUsd(entry.approxUsdMinor) }}</li>
+          }
+        </ul>
+      }
+
+      @if (byDestination().length > 0) {
+        <h3 class="summary-subtitle">{{ 'expenses.byDestination' | translate }}</h3>
+        <ul>
+          @for (entry of byDestination(); track entry.destinationId) {
+            <li>{{ entry.label }}: {{ formatUsd(entry.approxUsdMinor) }}</li>
+          }
+        </ul>
+      }
+    </div>
+
+    <div class="app-card expense-form">
+      @if (formError(); as error) {
+        <p class="error">{{ error }}</p>
+      }
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'expenses.amount' | translate }}</ion-label>
+        <ion-input
+          type="number"
+          [ngModel]="amount()"
+          (ngModelChange)="amount.set($event)"
+          [placeholder]="'expenses.amountPlaceholder' | translate"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'expenses.currency' | translate }}</ion-label>
+        <ion-select
+          [ngModel]="currency()"
+          (ngModelChange)="currency.set($event)"
+          interface="popover"
+        >
+          @for (c of currencies; track c) {
+            <ion-select-option [value]="c">{{ c }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'expenses.category' | translate }}</ion-label>
+        <ion-select
+          [ngModel]="category()"
+          (ngModelChange)="category.set($event)"
+          interface="popover"
+        >
+          @for (value of categories; track value) {
+            <ion-select-option [value]="value">
+              {{ 'expenses.categories.' + value | translate }}
+            </ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      @if (destinationService.destinations().length > 0) {
+        <ion-item lines="none">
+          <ion-label position="stacked">{{ 'expenses.destinationOptional' | translate }}</ion-label>
+          <ion-select
+            [ngModel]="destinationId()"
+            (ngModelChange)="destinationId.set($event)"
+            interface="popover"
+          >
+            <ion-select-option value="">{{ 'common.none' | translate }}</ion-select-option>
+            @for (destination of destinationService.destinations(); track destination.id) {
+              <ion-select-option [value]="destination.id">{{ destination.name }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      }
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'expenses.date' | translate }}</ion-label>
+        <ion-input type="date" [ngModel]="date()" (ngModelChange)="date.set($event)"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'expenses.descriptionOptional' | translate }}</ion-label>
+        <ion-input
+          type="text"
+          [ngModel]="description()"
+          (ngModelChange)="description.set($event)"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" [disabled]="saving()" (click)="addExpense()">
+        {{ 'expenses.addExpense' | translate }}
+      </ion-button>
+    </div>
+
+    @if (recentExpenses().length === 0) {
+      <app-empty-state
+        icon="wallet-outline"
+        [title]="'expenses.emptyTitle' | translate"
+        [message]="'expenses.empty' | translate"
+      ></app-empty-state>
+    } @else {
+      <h2 class="app-section-title">{{ 'expenses.recent' | translate }}</h2>
+      <div class="app-card">
+        <ion-list lines="none">
+          @for (expense of recentExpenses(); track expense.id) {
+            <ion-item-sliding #slidingItem>
+              <ion-item>
+                <div class="expense-dot app-category--expense" slot="start">
+                  <ion-icon name="cash-outline"></ion-icon>
+                </div>
+                <ion-label>
+                  <h2>
+                    {{
+                      expense.description || ('expenses.categories.' + expense.category | translate)
+                    }}
+                  </h2>
+                  <p>{{ expense.date | appDate }} - {{ formatMoney(expense.amount) }}</p>
+                </ion-label>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteExpense(expense, slidingItem)">
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          }
+        </ion-list>
+      </div>
+    }
+  </div>

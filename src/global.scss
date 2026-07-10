@@ -1,0 +1,711 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import '@ionic/angular/css/core.css';
+
+/* Basic CSS for apps built with Ionic */
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* Dark palette handling is fully custom (task 7.1/7.3, src/theme/*.scss) via
+ * data-theme + prefers-color-scheme, so none of Ionic's own dark-mode CSS
+ * imports are used here — they would fight with our token overrides. */
+
+/**
+ * Shared design-system utility classes (task 7.2) — used across pages so the
+ * TripIt-style visual language (gradient headers, elevated cards, timeline)
+ * stays consistent without duplicating CSS per feature.
+ */
+
+ion-content {
+  --background: var(--app-surface-page);
+  --color: var(--app-on-surface);
+  font-family: var(--app-font-sans);
+}
+
+/*
+ * Action-sheet label contrast fix (trip card "..." overflow menu, and every
+ * other `ion-action-sheet` in the app — destinations, destination detail,
+ * lodging). Ionic's own MD-mode default for `--button-color` resolves
+ * through an undefined `--ion-color-step-850` / `--ion-text-color-step-150`
+ * chain down to a HARDCODED `#262626`, regardless of theme — on this app's
+ * dark surfaces that renders near-invisible/"disabled-looking" label text
+ * next to a normal-contrast icon (icon uses `--color`, which DOES resolve
+ * through our theme's `--ion-text-color-rgb`). Overriding both variables to
+ * the same on-surface token keeps icon + label at matching full contrast in
+ * both light and dark themes, app-wide, without touching each call site.
+ */
+ion-action-sheet {
+  --button-color: var(--app-on-surface);
+  --color: var(--app-on-surface);
+}
+
+/**
+ * Type scale utility classes (UI redesign iteration 1). Primary reading
+ * content uses `.app-text-body-lg` (17px) for low-literacy readability —
+ * never go below `.app-text-caption` (13px) in user-facing copy.
+ */
+.app-text-display {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 34px;
+  letter-spacing: -0.02em;
+}
+.app-text-title-lg {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 28px;
+  letter-spacing: -0.01em;
+}
+.app-text-title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.01em;
+}
+.app-text-body-lg {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.app-text-body {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22px;
+}
+.app-text-label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+}
+.app-text-caption {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+}
+.app-text-overline {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.app-text-num {
+  font-family: var(--app-font-num);
+}
+
+/* Gradient header — applied to the first ion-toolbar of a page header. */
+.app-gradient-toolbar {
+  --background: var(--app-color-primary-gradient);
+  --color: #ffffff;
+  --border-color: transparent;
+
+  ion-title {
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  ion-back-button,
+  ion-button,
+  ion-icon {
+    --color: #ffffff;
+    color: #ffffff;
+  }
+}
+
+.app-gradient-header {
+  ion-toolbar:first-of-type {
+    --background: var(--app-color-primary-gradient);
+    --color: #ffffff;
+    --border-color: transparent;
+
+    ion-title {
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    ion-back-button,
+    ion-button,
+    ion-icon {
+      --color: #ffffff;
+      color: #ffffff;
+    }
+  }
+}
+
+/* Elevated rounded content card — the base visual unit of every page. */
+.app-card {
+  background: var(--app-surface-card);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-sm);
+  padding: var(--app-space-md);
+  margin: 0 var(--app-space-md) var(--app-space-md);
+  transition:
+    transform var(--app-dur-fast) var(--app-ease-standard),
+    box-shadow var(--app-dur-fast) var(--app-ease-standard);
+
+  &.app-card--interactive:active {
+    transform: scale(0.98);
+    box-shadow: var(--app-shadow-sm);
+  }
+}
+
+.app-card--raised {
+  box-shadow: var(--app-shadow-md);
+}
+
+.app-section-title {
+  padding: var(--app-space-md) var(--app-space-md) var(--app-space-sm);
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--app-on-surface-muted);
+}
+
+/* --- Buttons (task C8) ------------------------------------------------- */
+.app-btn-primary {
+  --border-radius: var(--app-radius-pill);
+  --box-shadow: none;
+  height: 52px;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: none;
+}
+
+.app-btn-secondary {
+  --border-radius: var(--app-radius-pill);
+  --border-width: 1.5px;
+  height: 52px;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: none;
+}
+
+.app-btn-tertiary {
+  --border-radius: var(--app-radius-pill);
+  height: 44px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+/*
+ * Compact tonal button for secondary in-card actions (e.g. "Get directions"
+ * on a Lodging/Ticket row) — deliberately lighter than `.app-btn-primary`,
+ * which is reserved for main CTAs. Sized to its content (no full-width
+ * pill), min 40px tall to stay comfortably tappable.
+ */
+.app-btn-tonal {
+  --border-radius: var(--app-radius-pill);
+  --background: var(--app-info-bg);
+  --background-hover: var(--app-info-bg);
+  --background-activated: var(--app-info-bg);
+  --background-focused: var(--app-info-bg);
+  --color: var(--app-info);
+  --box-shadow: none;
+  --padding-start: var(--app-space-md);
+  --padding-end: var(--app-space-md);
+  min-height: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: none;
+}
+
+/* --- Chips / badges (task C7) ------------------------------------------ */
+.app-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 var(--app-space-sm);
+  border-radius: var(--app-radius-pill);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.app-chip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
+}
+
+.app-chip--pulsing .app-chip__dot {
+  animation: app-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes app-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.app-chip--info {
+  background: var(--app-info-bg);
+  color: var(--app-info);
+}
+.app-chip--success {
+  background: var(--app-success-bg);
+  color: var(--app-success);
+}
+.app-chip--warning {
+  background: var(--app-warning-bg);
+  color: var(--app-warning);
+}
+.app-chip--danger {
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+}
+.app-chip--muted {
+  background: var(--app-surface-muted);
+  color: var(--app-on-surface-muted);
+}
+
+/* --- Skeleton loading shimmer (task E) ----------------------------------- */
+.app-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--app-surface-muted);
+  border-radius: var(--app-radius-md);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent
+    );
+    animation: app-skeleton-sweep 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes app-skeleton-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Skeleton size presets — reused across Today/Trips/Destinations loading
+ * states so every page's placeholder roughly matches the shape it stands
+ * in for (hero card, list line, content card). */
+.app-skeleton--hero {
+  height: 170px;
+  margin: 0 var(--app-space-md) var(--app-space-md);
+  border-radius: var(--app-radius-md);
+}
+.app-skeleton--card {
+  height: 88px;
+  margin: 0 var(--app-space-md) var(--app-space-md);
+  border-radius: var(--app-radius-md);
+}
+.app-skeleton--line {
+  height: 16px;
+  width: 60%;
+  margin: 0 var(--app-space-md) var(--app-space-md);
+  border-radius: var(--app-radius-sm);
+}
+.app-skeleton--avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Visually hidden but still announced to assistive tech — pairs with
+ * skeleton placeholders so loading state is not silent for screen readers. */
+.app-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Empty state (task C10) --------------------------------------------- */
+.app-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--app-space-sm);
+  padding: var(--app-space-2xl) var(--app-space-lg);
+  text-align: center;
+}
+
+.app-empty-state__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--app-surface-muted);
+  color: var(--app-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: var(--app-space-sm);
+}
+
+.app-empty-state__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.app-empty-state__message {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--app-on-surface-muted);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.app-empty-state__cta {
+  margin-top: var(--app-space-sm);
+}
+
+/* --- Storage meter (task C11) -------------------------------------------- */
+.app-storage-meter__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: var(--app-space-xs);
+}
+
+.app-storage-meter__track {
+  height: 10px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-surface-sunken, var(--app-surface-muted));
+  overflow: hidden;
+}
+
+.app-storage-meter__fill {
+  height: 100%;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-color-primary);
+  transition: width var(--app-dur-base) var(--app-ease-standard);
+
+  &.app-storage-meter__fill--warning {
+    background: var(--app-warning);
+  }
+  &.app-storage-meter__fill--danger {
+    background: var(--app-danger);
+  }
+}
+
+.app-storage-meter__note {
+  margin: var(--app-space-xs) 0 0;
+  font-size: 13px;
+  color: var(--app-on-surface-muted);
+}
+
+/* --- Section nav (task C5) ------------------------------------------------ */
+.app-section-nav {
+  --background: transparent;
+}
+
+/*
+ * Overrides Ionic's default segment "checked" indicator (a filled
+ * background box that, on top of this app's gradient/translucent headers,
+ * showed up in screenshots as a stray blue circular glow — MEDIUM #5).
+ * Replaced with a clean, contained 3px underline per design §C5
+ * ("active: filled icon + underline 3px"). `mode="ios"` on the host
+ * template also disables Ionic's MD ripple effect, which was the other
+ * source of the frozen/glowing circle on tap.
+ */
+.app-section-nav ion-segment-button {
+  min-width: 84px;
+  --padding-top: var(--app-space-xs);
+  --padding-bottom: var(--app-space-xs);
+  --indicator-color: transparent;
+  --indicator-box-shadow: none;
+  --background-checked: transparent;
+  --color-checked: var(--app-color-primary);
+  position: relative;
+
+  ion-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
+  ion-label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    bottom: 2px;
+    height: 3px;
+    border-radius: var(--app-radius-pill);
+    background: transparent;
+    transition: background var(--app-dur-fast) var(--app-ease-standard);
+  }
+
+  &.segment-button-checked::after {
+    background: var(--app-color-primary);
+  }
+}
+
+/* Timeline (shared by Today / Destinations / Itinerary) — see
+ * presentation/shared/components/timeline for the reusable component. */
+.app-timeline {
+  position: relative;
+  padding: 0 var(--app-space-md);
+}
+
+.app-timeline-item {
+  position: relative;
+  display: flex;
+  gap: var(--app-space-md);
+  padding-bottom: var(--app-space-lg);
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 34px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--app-border-subtle);
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+}
+
+.app-timeline-dot {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1rem;
+  z-index: 1;
+  box-shadow: var(--app-shadow-sm);
+}
+
+.app-timeline-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--app-surface-card);
+  border-radius: var(--app-radius-md);
+  padding: var(--app-space-sm) var(--app-space-md);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.app-timeline-date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--app-on-surface-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.app-timeline-label {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+
+.app-timeline-meta {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--app-on-surface-muted);
+}
+
+/* Category accent color modifiers, reused by the timeline dot + chips. */
+.app-category--destination {
+  background: var(--app-category-destination);
+}
+.app-category--lodging {
+  background: var(--app-category-lodging);
+}
+.app-category--document {
+  background: var(--app-category-document);
+}
+.app-category--expense {
+  background: var(--app-category-expense);
+}
+.app-category--checklist {
+  background: var(--app-category-checklist);
+}
+.app-category--reminder {
+  background: var(--app-category-reminder);
+}
+.app-category--transport {
+  background: var(--app-category-transport);
+}
+
+/* Hidden native file input, paired with a styled ion-button trigger
+ * (task 7.2 — replaces raw file-input controls). */
+.app-hidden-file-input {
+  display: none;
+}
+
+/* Subtle page-enter transition. */
+.app-fade-in {
+  animation: app-fade-in 0.25s ease both;
+}
+
+@keyframes app-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+ion-item-sliding,
+.app-card {
+  animation: app-fade-in 0.2s ease both;
+}
+
+/* Responsive content column (task 7.4) — keeps wide viewports readable. */
+.app-page-content {
+  max-width: 840px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--app-space-md);
+  padding: 0 var(--app-space-md);
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.app-grid .app-card {
+  margin: 0;
+}
+
+/* --- Motion polish (global aesthetic pass) ------------------------------ */
+
+/* Staggered list/grid entrance — apply `.app-stagger` to the container;
+ * direct children fade+slide in with an increasing delay (design §E). */
+.app-stagger > * {
+  animation: app-fade-in var(--app-dur-base) var(--app-ease-standard) both;
+}
+@for $i from 1 through 12 {
+  .app-stagger > *:nth-child(#{$i}) {
+    animation-delay: #{($i - 1) * 40}ms;
+  }
+}
+
+/* FAB spring entrance — the single primary "add" action on a page. */
+.app-fab-spring ion-fab-button {
+  animation: app-fab-spring var(--app-dur-slow) var(--app-ease-spring) both;
+}
+
+@keyframes app-fab-spring {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- Empty state illustration (richer than a flat icon) ---------------- */
+.app-empty-state__icon {
+  position: relative;
+  background:
+    radial-gradient(circle at 30% 30%, var(--app-color-primary-tint) 0%, transparent 60%),
+    var(--app-surface-muted);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px dashed var(--app-outline);
+  }
+  &::before {
+    inset: -12px;
+  }
+  &::after {
+    inset: -24px;
+    opacity: 0.5;
+  }
+}
+
+/* --- Respect prefers-reduced-motion — gate everything above at once ----- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

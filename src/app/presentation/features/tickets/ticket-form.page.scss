@@ -1,0 +1,15 @@
+.error {
+  color: var(--ion-color-danger);
+  padding: 0.5rem 1rem;
+}
+
+ion-segment {
+  margin: 0.5rem 1rem 1rem;
+}
+
+.actions {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

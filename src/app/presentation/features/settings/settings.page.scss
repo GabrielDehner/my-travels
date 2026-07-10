@@ -1,0 +1,27 @@
+.storage-info {
+  padding: 0 var(--app-space-xs);
+}
+
+.storage-figures {
+  margin: 0 0 var(--app-space-xs);
+  font-weight: 600;
+}
+
+.warning {
+  color: var(--ion-color-warning-shade);
+  font-weight: 600;
+  margin-top: var(--app-space-xs);
+}
+
+.status {
+  color: var(--app-category-expense);
+  margin: var(--app-space-sm) 0 0;
+}
+
+.empty-note {
+  color: var(--app-on-surface-muted);
+}
+
+ion-button {
+  margin-top: var(--app-space-sm);
+}

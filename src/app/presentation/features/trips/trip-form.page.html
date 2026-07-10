@@ -1,0 +1,141 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="/tabs/trips"
+        text=""
+        [attr.aria-label]="'common.back' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (isEditMode() ? 'tripForm.editTitle' : 'tripForm.newTitle') | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content">
+    @if (formError(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <!-- Cover photo — single obvious "add photo" affordance. Optional; falls
+         back to the color-gradient cover when no photo is chosen. -->
+    <div class="app-card cover-picker">
+      <p class="app-text-label cover-picker__label">{{ 'tripForm.coverLabel' | translate }}</p>
+      <button
+        type="button"
+        class="cover-picker__preview"
+        [style.background]="coverPreviewUrl() || existingCoverUrl() ? null : coverFallbackGradient()"
+        (click)="coverFileInput.click()"
+      >
+        @if (coverPreviewUrl() || existingCoverUrl()) {
+          <img class="cover-picker__img" [src]="coverPreviewUrl() ?? existingCoverUrl()" alt="" />
+        } @else {
+          <ion-icon name="cloud-upload-outline" aria-hidden="true"></ion-icon>
+        }
+        <span class="cover-picker__cta">{{ 'tripForm.coverPick' | translate }}</span>
+      </button>
+      <input
+        #coverFileInput
+        class="app-hidden-file-input"
+        type="file"
+        accept="image/*"
+        (change)="onCoverFileSelected($event)"
+      />
+    </div>
+
+    <!-- Essentials — the only fields a traveler really needs to start (design's
+         "minimum required fields" rule: Name + dates). -->
+    <div class="app-card">
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.name' | translate }}</ion-label>
+        <ion-input
+          type="text"
+          [ngModel]="title()"
+          (ngModelChange)="title.set($event)"
+          [placeholder]="'tripForm.namePlaceholder' | translate"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.startDate' | translate }}</ion-label>
+        <ion-input
+          type="date"
+          [ngModel]="startDate()"
+          (ngModelChange)="startDate.set($event)"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.endDate' | translate }}</ion-label>
+        <ion-input
+          type="date"
+          [ngModel]="endDate()"
+          (ngModelChange)="endDate.set($event)"
+        ></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- More details — optional, grouped so the essentials above stay the
+         clear primary focus of the screen. -->
+    <div class="app-card">
+      <p class="app-text-label color-label">{{ 'tripForm.colorLabel' | translate }}</p>
+      <div class="color-swatches" role="group" [attr.aria-label]="'tripForm.colorLabel' | translate">
+        @for (swatch of colorSwatches; track swatch) {
+          <button
+            type="button"
+            class="color-swatch"
+            [class.color-swatch--selected]="color() === swatch"
+            [style.background]="swatch"
+            [attr.aria-pressed]="color() === swatch"
+            [attr.aria-label]="swatch"
+            (click)="selectColor(swatch)"
+          >
+            @if (color() === swatch) {
+              <ion-icon name="checkmark" aria-hidden="true"></ion-icon>
+            }
+          </button>
+        }
+      </div>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.status' | translate }}</ion-label>
+        <ion-select [ngModel]="status()" (ngModelChange)="status.set($event)">
+          @for (option of statusOptions(); track option.value) {
+            <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.description' | translate }}</ion-label>
+        <ion-textarea
+          [ngModel]="description()"
+          (ngModelChange)="description.set($event)"
+          autoGrow="true"
+          [placeholder]="'tripForm.descriptionPlaceholder' | translate"
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'tripForm.notes' | translate }}</ion-label>
+        <ion-textarea
+          [ngModel]="notes()"
+          (ngModelChange)="notes.set($event)"
+          autoGrow="true"
+          [placeholder]="'tripForm.notesPlaceholder' | translate"
+        ></ion-textarea>
+      </ion-item>
+    </div>
+
+    <div class="actions">
+      <ion-button class="app-btn-primary" expand="block" [disabled]="saving()" (click)="save()">
+        {{ (isEditMode() ? 'tripForm.saveChanges' : 'tripForm.createTrip') | translate }}
+      </ion-button>
+      <ion-button class="app-btn-tertiary" expand="block" fill="clear" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

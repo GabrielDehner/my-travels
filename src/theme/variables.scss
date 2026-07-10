@@ -1,0 +1,10 @@
+// For information on how to create your own theme, please refer to:
+// https://ionicframework.com/docs/theming/
+//
+// Light/dark scaffolding: `light.scss` and `dark.scss` are placeholders for
+// the MD3-derived token overrides for each mode. Wiring them behind
+// `prefers-color-scheme` (system default) plus a manual override persisted in
+// Settings is done in Phase 7 (Cross-Cutting theming, design §15/§13) once
+// there are actual tokens to scope.
+@use 'light';
+@use 'dark';

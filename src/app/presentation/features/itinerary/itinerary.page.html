@@ -1,0 +1,18 @@
+<!--
+  Content FRAGMENT (UI iteration 4, FIX 2): no outer `ion-content` here —
+  renders inside the parent `TripDetailPage`'s single shared `ion-content`.
+-->
+<div class="app-page-content">
+  @if (days().length === 0) {
+    <app-empty-state
+      icon="time-outline"
+      [title]="'itinerary.emptyTitle' | translate"
+      [message]="'itinerary.empty' | translate"
+    ></app-empty-state>
+  }
+
+  @for (group of days(); track group.day) {
+    <h2 class="app-section-title">{{ group.day | appDate }}</h2>
+    <app-timeline [items]="group.items"></app-timeline>
+  }
+</div>

@@ -1,0 +1,7 @@
+www/
+dist/
+node_modules/
+.angular/
+coverage/
+android/
+ios/

@@ -1,0 +1,142 @@
+// Dark theme tokens.
+//
+// 2026 modern refresh (UI redesign iteration 1). Applied automatically when
+// the system prefers dark AND no manual override is set (`data-theme`
+// absent), and always when `data-theme="dark"` is set on <html> (see
+// theme.service.ts). Mirrors the light palette's token names so components
+// never branch on theme — they read the same custom properties either way.
+
+@mixin app-dark-tokens {
+  --app-blue-50: #0f1a30;
+  --app-blue-100: #14224a;
+  --app-blue-200: #1c3268;
+  --app-blue-300: #2a4a94;
+  --app-blue-400: #3d6fd6;
+  --app-blue-500: #4a7bef;
+  --app-blue-600: #5b8def;
+  --app-blue-700: #7ba3f2;
+  --app-blue-800: #a7c2f6;
+  --app-blue-900: #d4e2fb;
+
+  --app-color-primary: var(--app-blue-600);
+  --app-color-primary-rgb: 91, 141, 239;
+  --app-color-primary-shade: #4a78d6;
+  --app-color-primary-tint: #7ba3f2;
+  --app-color-primary-gradient: linear-gradient(135deg, #1a3a8f 0%, #2a55b8 55%, #3d6fd6 100%);
+
+  --app-color-accent: #ff9d55;
+  --app-color-accent-rgb: 255, 157, 85;
+  --app-color-accent-shade: #d9701f;
+  --app-color-accent-tint: #ffb377;
+
+  --app-surface-page: #0f131b;
+  --app-surface: #181f2b;
+  --app-surface-variant: #212a3a;
+  --app-surface-card: #181f2b;
+  --app-surface-raised: #212a3a;
+  --app-surface-muted: #232b3b;
+  --app-surface-sunken: #12161f;
+  --app-outline: #2f3849;
+  --app-border-subtle: #2b3345;
+
+  --app-on-surface: #eef1f8;
+  --app-on-surface-muted: #9aa4ba;
+  --app-on-surface-faint: #6b7688;
+
+  --app-success: #3ecf9a;
+  --app-success-bg: #12352a;
+  --app-warning: #f0b64d;
+  --app-warning-bg: #3a2e14;
+  --app-danger: #ef6b71;
+  --app-danger-bg: #3a1f22;
+  --app-info: #5b8def;
+  --app-info-bg: #182742;
+
+  --app-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --app-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.32), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --app-shadow-md: 0 6px 16px rgba(0, 0, 0, 0.38), 0 2px 6px rgba(0, 0, 0, 0.26);
+  --app-shadow-lg: 0 16px 34px rgba(0, 0, 0, 0.48), 0 6px 12px rgba(0, 0, 0, 0.3);
+
+  --app-radius-sm: 10px;
+  --app-radius-md: 16px;
+  --app-radius-lg: 22px;
+  --app-radius-xl: 28px;
+  --app-radius-pill: 999px;
+
+  --app-space-xs: 4px;
+  --app-space-sm: 8px;
+  --app-space-md: 16px;
+  --app-space-lg: 24px;
+  --app-space-xl: 32px;
+  --app-space-2xl: 48px;
+  --app-space-3xl: 64px;
+
+  --app-dur-fast: 120ms;
+  --app-dur-base: 220ms;
+  --app-dur-slow: 320ms;
+  --app-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --app-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --app-font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif;
+  --app-font-num: ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
+
+  --app-category-destination: #5b8def;
+  --app-category-destination-bg: #182742;
+  --app-category-lodging: #ff9d55;
+  --app-category-lodging-bg: #3a2b14;
+  --app-category-document: #9c85ff;
+  --app-category-document-bg: #241d42;
+  --app-category-expense: #3ecf9a;
+  --app-category-expense-bg: #12352a;
+  --app-category-checklist: #ef85ad;
+  --app-category-checklist-bg: #3a1f2e;
+  --app-category-reminder: #ef6b71;
+  --app-category-reminder-bg: #3a1f22;
+  --app-category-transport: #4bc3da;
+  --app-category-transport-bg: #123138;
+
+  --ion-color-primary: var(--app-color-primary);
+  --ion-color-primary-rgb: var(--app-color-primary-rgb);
+  --ion-color-primary-contrast: #0b0f16;
+  --ion-color-primary-contrast-rgb: 11, 15, 22;
+  --ion-color-primary-shade: var(--app-color-primary-shade);
+  --ion-color-primary-tint: var(--app-color-primary-tint);
+
+  --ion-color-secondary: var(--app-color-accent);
+  --ion-color-secondary-rgb: var(--app-color-accent-rgb);
+  --ion-color-secondary-contrast: #0b0f16;
+  --ion-color-secondary-contrast-rgb: 11, 15, 22;
+  --ion-color-secondary-shade: var(--app-color-accent-shade);
+  --ion-color-secondary-tint: var(--app-color-accent-tint);
+
+  --ion-color-danger: var(--app-danger);
+  --ion-color-success: var(--app-success);
+  --ion-color-warning: var(--app-warning);
+
+  --ion-background-color: var(--app-surface-page);
+  --ion-background-color-rgb: 15, 19, 27;
+  --ion-text-color: var(--app-on-surface);
+  --ion-text-color-rgb: 238, 241, 248;
+
+  --ion-card-background: var(--app-surface-card);
+  --ion-item-background: var(--app-surface-card);
+  --ion-toolbar-background: transparent;
+  --ion-tab-bar-background: var(--app-surface-card);
+  --ion-border-color: var(--app-border-subtle);
+
+  --ion-color-step-50: #181f2b;
+  --ion-color-step-100: #212a3a;
+  --ion-color-step-150: #262f40;
+  --ion-color-step-200: #2b3345;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+    @include app-dark-tokens;
+  }
+}
+
+:root[data-theme='dark'] {
+  @include app-dark-tokens;
+}

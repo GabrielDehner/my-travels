@@ -1,0 +1,76 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="'/tabs/trips/' + tripId() + '/destinations'"
+        text=""
+        [attr.aria-label]="'common.back' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'lodging.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content">
+    @if (hotelService.error(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    @if (hotelService.hotels().length === 0) {
+      <app-empty-state
+        icon="bed-outline"
+        [title]="'lodging.emptyTitle' | translate"
+        [message]="'lodging.empty' | translate"
+        [ctaLabel]="'lodging.emptyCta' | translate"
+        (cta)="goToNewLodging()"
+      ></app-empty-state>
+    }
+
+    <div class="app-grid">
+      @for (hotel of hotelService.hotels(); track hotel.id) {
+        <div class="app-card app-card--interactive hotel-card">
+          <a
+            class="hotel-card__link"
+            [routerLink]="[
+              '/tabs/trips',
+              tripId(),
+              'destinations',
+              destinationId(),
+              'lodging',
+              hotel.id,
+              'edit',
+            ]"
+          >
+            <h2>{{ hotel.name }}</h2>
+            <p class="hotel-meta">
+              {{
+                'lodging.checkInOut'
+                  | translate: { checkIn: hotel.checkIn | appDate, checkOut: hotel.checkOut | appDate }
+              }}
+            </p>
+            @if (hotel.confirmationCode) {
+              <p class="hotel-meta">
+                {{ 'lodging.confirmation' | translate: { code: hotel.confirmationCode } }}
+              </p>
+            }
+            @if (formatPrice(hotel); as price) {
+              <p class="hotel-meta">{{ price }}</p>
+            }
+          </a>
+          <ion-button class="hotel-more" fill="clear" (click)="openHotelMenu($event, hotel)">
+            <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+          </ion-button>
+        </div>
+      }
+    </div>
+  </div>
+
+  <ion-fab class="app-fab-spring" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button
+      [routerLink]="['/tabs/trips', tripId(), 'destinations', destinationId(), 'lodging', 'new']"
+    >
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

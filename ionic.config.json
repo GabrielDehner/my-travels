@@ -1,0 +1,7 @@
+{
+  "name": "my-travels",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

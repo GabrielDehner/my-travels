@@ -1,0 +1,75 @@
+<!--
+  Content FRAGMENT (UI iteration 4, FIX 2): no outer `ion-content` here —
+  renders inside the parent `TripDetailPage`'s single shared `ion-content`.
+  The `ion-fab[slot="fixed"]` below still positions correctly relative to
+  that shared ancestor `ion-content`.
+-->
+<div class="app-page-content">
+    @if (destinationService.error(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    @if (timeline().length === 0) {
+      <app-empty-state
+        icon="location-outline"
+        [title]="'destinations.emptyTitle' | translate"
+        [message]="'destinations.empty' | translate"
+        [ctaLabel]="'destinations.emptyCta' | translate"
+        (cta)="goToNewDestination()"
+      ></app-empty-state>
+    }
+
+    @for (destination of timeline(); track destination.id) {
+      <div class="app-timeline-item destination-row">
+        <div class="app-timeline-dot app-category--destination">
+          <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+        </div>
+        <div
+          class="app-timeline-content destination-card"
+          [routerLink]="['/tabs/trips', tripId(), 'destinations', destination.id]"
+        >
+          <p class="app-timeline-date">
+            {{ destination.arrival | appDateRange: destination.departure }}
+          </p>
+          <p class="app-timeline-label">{{ destination.name }}</p>
+          @if (destination.countryCode || destination.country) {
+            <p class="app-timeline-meta destination-country">
+              {{ destination.countryCode | countryDisplay: destination.country }}
+            </p>
+          }
+
+          @if (lodgingFor(destination).length > 0) {
+            @for (hotel of lodgingFor(destination); track hotel.id) {
+              <p class="app-timeline-meta lodging-line">
+                <ion-icon name="bed-outline" class="app-category--lodging"></ion-icon>
+                {{
+                  'destinations.lodgingLine'
+                    | translate: { name: hotel.name, checkIn: hotel.checkIn | appDate }
+                }}
+              </p>
+            }
+          } @else {
+            <p class="app-timeline-meta lodging-line no-lodging">
+              {{ 'destinations.noLodging' | translate }}
+            </p>
+          }
+
+          <div class="destination-actions">
+            <ion-button
+              size="small"
+              fill="clear"
+              (click)="openDestinationMenu($event, destination)"
+            >
+              <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+<ion-fab class="app-fab-spring" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button [routerLink]="['/tabs/trips', tripId(), 'destinations', 'new']">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

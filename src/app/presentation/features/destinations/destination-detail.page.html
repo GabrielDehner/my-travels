@@ -1,0 +1,157 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="'/tabs/trips/' + tripId() + '/destinations'"
+        text=""
+        [attr.aria-label]="'common.back' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ destination()?.name ?? ('destinationDetail.title' | translate) }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content">
+    @if (destination(); as place) {
+      <p class="place-dates">
+        {{ place.arrival | appDate }} - {{ place.departure | appDate }}
+      </p>
+      @if (place.countryCode || place.country) {
+        <p class="place-country">
+          {{ place.countryCode | countryDisplay: place.country }}
+        </p>
+      }
+    }
+
+    @if (hotelService.error(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+    @if (transportService.error(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <div class="section-heading">
+      <h2 class="app-section-title">{{ 'destinationDetail.lodgingSection' | translate }}</h2>
+      <ion-button size="small" fill="clear" (click)="goToNewLodging()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        {{ 'destinationDetail.addLodging' | translate }}
+      </ion-button>
+    </div>
+
+    @if (!loaded()) {
+      <div class="app-skeleton app-skeleton--card" aria-hidden="true"></div>
+    } @else if (hotelService.hotels().length === 0) {
+      <app-empty-state
+        icon="bed-outline"
+        [title]="'destinationDetail.noLodging' | translate"
+        [message]="'destinationDetail.noLodgingMessage' | translate"
+        [ctaLabel]="'destinationDetail.addLodging' | translate"
+        (cta)="goToNewLodging()"
+      ></app-empty-state>
+    }
+
+    @for (hotel of hotelService.hotels(); track hotel.id) {
+      <div class="app-card app-card--interactive logistics-card">
+        <div class="logistics-card__header">
+          <ion-icon name="bed-outline" class="app-category--lodging logistics-icon"></ion-icon>
+          <h3>{{ hotel.name }}</h3>
+          <ion-button fill="clear" size="small" (click)="openLodgingMenu($event, hotel)">
+            <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+          </ion-button>
+        </div>
+
+        <p class="logistics-meta">
+          {{
+            'lodging.checkInOut'
+              | translate: { checkIn: hotel.checkIn | appDate, checkOut: hotel.checkOut | appDate }
+          }}
+        </p>
+        @if (hotel.confirmationCode) {
+          <p class="logistics-meta">
+            {{ 'lodging.confirmation' | translate: { code: hotel.confirmationCode } }}
+          </p>
+        }
+
+        <div class="logistics-actions">
+          @if (attachedFileFor('hotel', hotel.id); as doc) {
+            <ion-button size="small" fill="outline" (click)="openReservationFile(doc.id)">
+              <ion-icon slot="start" name="open-outline"></ion-icon>
+              {{ 'destinationDetail.openFile' | translate }}
+            </ion-button>
+          }
+          @if (hasLodgingLocation(hotel)) {
+            <ion-button size="small" fill="clear" class="app-btn-tonal" (click)="getDirectionsToLodging(hotel)">
+              <ion-icon slot="start" name="navigate-outline"></ion-icon>
+              {{ 'common.getDirections' | translate }}
+            </ion-button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="section-heading">
+      <h2 class="app-section-title">{{ 'destinationDetail.ticketsSection' | translate }}</h2>
+      <ion-button size="small" fill="clear" (click)="goToNewTicket()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        {{ 'destinationDetail.addTicket' | translate }}
+      </ion-button>
+    </div>
+
+    @if (!loaded()) {
+      <div class="app-skeleton app-skeleton--card" aria-hidden="true"></div>
+    } @else if (transportService.transports().length === 0) {
+      <app-empty-state
+        icon="airplane-outline"
+        [title]="'destinationDetail.noTickets' | translate"
+        [message]="'destinationDetail.noTicketsMessage' | translate"
+        [ctaLabel]="'destinationDetail.addTicket' | translate"
+        (cta)="goToNewTicket()"
+      ></app-empty-state>
+    }
+
+    @for (transport of transportService.transports(); track transport.id) {
+      <div class="app-card app-card--interactive logistics-card">
+        <div class="logistics-card__header">
+          <ion-icon
+            [name]="transportIcon(transport.type)"
+            class="app-category--transport logistics-icon"
+          ></ion-icon>
+          <h3>{{ ticketLabel(transport) }}</h3>
+          <ion-button fill="clear" size="small" (click)="openTicketMenu($event, transport)">
+            <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+          </ion-button>
+        </div>
+
+        @if (transport.company || transport.number) {
+          <p class="logistics-meta">{{ transport.company }} {{ transport.number }}</p>
+        }
+        @if (transport.departAt) {
+          <p class="logistics-meta">
+            {{ 'ticketForm.departAt' | translate }}: {{ transport.departAt | appDate }}
+          </p>
+        }
+
+        <div class="logistics-actions">
+          @if (transport.bookingUrl) {
+            <ion-button size="small" fill="outline" (click)="openBookingLink(transport.bookingUrl)">
+              <ion-icon slot="start" name="link-outline"></ion-icon>
+              {{ 'destinationDetail.openLink' | translate }}
+            </ion-button>
+          } @else if (attachedFileFor('transport', transport.id); as doc) {
+            <ion-button size="small" fill="outline" (click)="openReservationFile(doc.id)">
+              <ion-icon slot="start" name="open-outline"></ion-icon>
+              {{ 'destinationDetail.openFile' | translate }}
+            </ion-button>
+          }
+          @if (hasTerminalLocation(transport)) {
+            <ion-button size="small" fill="clear" class="app-btn-tonal" (click)="getDirectionsToTerminal(transport)">
+              <ion-icon slot="start" name="navigate-outline"></ion-icon>
+              {{ 'common.getDirections' | translate }}
+            </ion-button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</ion-content>

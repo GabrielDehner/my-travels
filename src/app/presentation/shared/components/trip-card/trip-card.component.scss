@@ -1,0 +1,84 @@
+:host {
+  display: block;
+}
+
+.trip-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.trip-card--past {
+  opacity: 0.75;
+}
+
+.trip-card__cover {
+  position: relative;
+  display: block;
+  height: 140px;
+  color: #ffffff;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.trip-card__cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trip-card__chip {
+  position: absolute;
+  top: var(--app-space-sm);
+  right: var(--app-space-sm);
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+
+.trip-card__watermark {
+  position: absolute;
+  right: var(--app-space-md);
+  bottom: 40px;
+  font-size: 44px;
+  opacity: 0.18;
+}
+
+.trip-card__scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: var(--app-space-md);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+}
+
+.trip-card__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.trip-card__dates {
+  margin: 2px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.trip-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--app-space-sm) var(--app-space-sm) var(--app-space-sm) var(--app-space-md);
+}
+
+.trip-card__meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--app-on-surface-muted);
+}
+
+.trip-card__more {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  margin: 0;
+}

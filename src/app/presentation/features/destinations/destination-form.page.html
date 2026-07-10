@@ -1,0 +1,117 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="'/tabs/trips/' + tripId() + '/destinations'"
+        text=""
+        [attr.aria-label]="'common.back' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (isEditMode() ? 'destinationForm.editTitle' : 'destinationForm.newTitle') | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content app-card">
+    @if (formError(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.name' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="name()"
+        (ngModelChange)="name.set($event)"
+        [placeholder]="'destinationForm.namePlaceholder' | translate"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.country' | translate }}</ion-label>
+      <ion-select
+        [ngModel]="countryCode()"
+        (ngModelChange)="countryCode.set($event)"
+        [placeholder]="'destinationForm.countryPlaceholder' | translate"
+      >
+        <ion-select-option value="">{{ 'destinationForm.countryNone' | translate }}</ion-select-option>
+        @for (option of countryOptions(); track option.code) {
+          <ion-select-option [value]="option.code">{{ option.label }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.city' | translate }}</ion-label>
+      <ion-input type="text" [ngModel]="city()" (ngModelChange)="city.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.arrival' | translate }}</ion-label>
+      <ion-input
+        type="date"
+        [ngModel]="arrival()"
+        (ngModelChange)="arrival.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.departure' | translate }}</ion-label>
+      <ion-input
+        type="date"
+        [ngModel]="departure()"
+        (ngModelChange)="departure.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.latitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="geoLat()"
+        (ngModelChange)="geoLat.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.longitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="geoLng()"
+        (ngModelChange)="geoLng.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.locationLabel' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="geoLabel()"
+        (ngModelChange)="geoLabel.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'destinationForm.notes' | translate }}</ion-label>
+      <ion-textarea
+        [ngModel]="notes()"
+        (ngModelChange)="notes.set($event)"
+        autoGrow="true"
+      ></ion-textarea>
+    </ion-item>
+
+    <div class="actions">
+      <ion-button expand="block" [disabled]="saving()" (click)="save()">
+        {{
+          (isEditMode() ? 'destinationForm.saveChanges' : 'destinationForm.addDestination')
+            | translate
+        }}
+      </ion-button>
+      <ion-button expand="block" fill="clear" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

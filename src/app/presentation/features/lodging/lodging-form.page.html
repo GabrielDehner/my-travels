@@ -1,0 +1,195 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="'/tabs/trips/' + tripId() + '/destinations/' + destinationId() + '/lodging'"
+        text=""
+        [attr.aria-label]="'common.back' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (isEditMode() ? 'lodgingForm.editTitle' : 'lodgingForm.newTitle') | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content app-card">
+    @if (formError(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.name' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="name()"
+        (ngModelChange)="name.set($event)"
+        [placeholder]="'lodgingForm.namePlaceholder' | translate"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.address' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="address()"
+        (ngModelChange)="address.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.phone' | translate }}</ion-label>
+      <ion-input type="tel" [ngModel]="phone()" (ngModelChange)="phone.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.email' | translate }}</ion-label>
+      <ion-input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.website' | translate }}</ion-label>
+      <ion-input type="url" [ngModel]="web()" (ngModelChange)="web.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.checkIn' | translate }}</ion-label>
+      <ion-input
+        type="date"
+        [ngModel]="checkIn()"
+        (ngModelChange)="checkIn.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.checkOut' | translate }}</ion-label>
+      <ion-input
+        type="date"
+        [ngModel]="checkOut()"
+        (ngModelChange)="checkOut.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.confirmationCode' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="confirmationCode()"
+        (ngModelChange)="confirmationCode.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <h2 class="app-section-title">{{ 'lodgingForm.location' | translate }}</h2>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.latitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="latitude()"
+        (ngModelChange)="latitude.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.longitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="longitude()"
+        (ngModelChange)="longitude.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.mapsUrl' | translate }}</ion-label>
+      <ion-input
+        type="url"
+        [ngModel]="mapsUrl()"
+        (ngModelChange)="mapsUrl.set($event)"
+        [placeholder]="'lodgingForm.mapsUrlPlaceholder' | translate"
+      ></ion-input>
+      <p class="app-text-caption">{{ 'lodgingForm.mapsUrlHint' | translate }}</p>
+    </ion-item>
+
+    <h2 class="app-section-title">{{ 'lodgingForm.reservationFile' | translate }}</h2>
+
+    <ion-button
+      class="app-btn-secondary"
+      fill="outline"
+      expand="block"
+      (click)="fileInput.click()"
+    >
+      <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+      {{ 'lodgingForm.chooseFile' | translate }}
+    </ion-button>
+    <input
+      #fileInput
+      class="app-hidden-file-input"
+      type="file"
+      multiple
+      accept="image/*,.pdf,application/pdf"
+      (change)="onFilesSelected($event)"
+    />
+
+    @for (file of pendingFiles(); track file.name) {
+      <ion-item lines="none">
+        <ion-icon slot="start" name="document-attach-outline"></ion-icon>
+        <ion-label>{{ file.name }}</ion-label>
+        <ion-button slot="end" fill="clear" (click)="removePendingFile(file)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    }
+
+    @for (doc of attachedFiles(); track doc.id) {
+      <ion-item lines="none" button (click)="openAttachedFile(doc)">
+        <ion-icon slot="start" name="document-attach-outline"></ion-icon>
+        <ion-label>{{ doc.title }}</ion-label>
+        <ion-button
+          slot="end"
+          fill="clear"
+          (click)="$event.stopPropagation(); removeAttachedFile(doc)"
+        >
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    }
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.price' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="priceAmount()"
+        (ngModelChange)="priceAmount.set($event)"
+        [placeholder]="'lodgingForm.pricePlaceholder' | translate"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.currency' | translate }}</ion-label>
+      <ion-select [ngModel]="priceCurrency()" (ngModelChange)="priceCurrency.set($event)">
+        @for (currency of currencies; track currency) {
+          <ion-select-option [value]="currency">{{ currency }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'lodgingForm.notes' | translate }}</ion-label>
+      <ion-textarea
+        [ngModel]="notes()"
+        (ngModelChange)="notes.set($event)"
+        autoGrow="true"
+      ></ion-textarea>
+    </ion-item>
+
+    <div class="actions">
+      <ion-button expand="block" [disabled]="saving()" (click)="save()">
+        {{ (isEditMode() ? 'lodgingForm.saveChanges' : 'lodgingForm.addLodging') | translate }}
+      </ion-button>
+      <ion-button expand="block" fill="clear" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,61 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-title>{{ 'trips.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content">
+    @if (travelService.error(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    @if (!loaded()) {
+      <div class="app-grid" aria-hidden="true">
+        <div class="app-skeleton app-skeleton--card" style="height: 140px; margin: 0;"></div>
+        <div class="app-skeleton app-skeleton--card" style="height: 140px; margin: 0;"></div>
+      </div>
+      <span class="app-sr-only">{{ 'common.loading' | translate }}</span>
+    } @else if (upcomingTrips().length === 0 && pastTrips().length === 0) {
+      <app-empty-state
+        icon="airplane-outline"
+        [title]="'trips.emptyTitle' | translate"
+        [message]="'trips.emptyMessage' | translate"
+        [ctaLabel]="'trips.emptyCta' | translate"
+        (cta)="goToNewTrip()"
+      ></app-empty-state>
+    }
+
+    @if (upcomingTrips().length > 0) {
+      <h2 class="app-section-title">{{ 'trips.upcoming' | translate }}</h2>
+      <div class="app-grid app-stagger">
+        @for (trip of upcomingTrips(); track trip.id) {
+          <app-trip-card
+            [trip]="trip"
+            (editRequested)="editTrip($event)"
+            (deleteRequested)="deleteTrip($event)"
+          ></app-trip-card>
+        }
+      </div>
+    }
+
+    @if (pastTrips().length > 0) {
+      <h2 class="app-section-title">{{ 'trips.past' | translate }}</h2>
+      <div class="app-grid">
+        @for (trip of pastTrips(); track trip.id) {
+          <app-trip-card
+            [trip]="trip"
+            (editRequested)="editTrip($event)"
+            (deleteRequested)="deleteTrip($event)"
+          ></app-trip-card>
+        }
+      </div>
+    }
+  </div>
+
+  <ion-fab class="app-fab-spring" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button [routerLink]="['/tabs/trips/new']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

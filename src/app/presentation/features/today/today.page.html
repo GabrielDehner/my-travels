@@ -1,0 +1,94 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-title>{{ greeting() }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/tabs/settings']">
+        <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content">
+    @if (!loaded()) {
+      <div class="app-skeleton app-skeleton--hero" aria-hidden="true"></div>
+      <div class="app-skeleton app-skeleton--line" aria-hidden="true"></div>
+      <div class="app-skeleton app-skeleton--card" aria-hidden="true"></div>
+      <div class="app-skeleton app-skeleton--card" aria-hidden="true"></div>
+      <span class="app-sr-only">{{ 'common.loading' | translate }}</span>
+    } @else if (activeTrip(); as trip) {
+      <a class="hero app-card app-card--raised app-card--interactive" [routerLink]="['/tabs/trips', trip.id]" [style.background]="heroCoverImageUrl() ? null : heroGradient(trip)">
+        @if (heroCoverImageUrl()) {
+          <img class="hero__cover-img" [src]="heroCoverImageUrl()" alt="" />
+        }
+        <span class="hero__chip app-chip" [class.app-chip--success]="isTripOngoing()" [class.app-chip--info]="!isTripOngoing()" [class.app-chip--pulsing]="isTripOngoing()">
+          <span class="app-chip__dot"></span>
+          {{ (isTripOngoing() ? 'trips.status.active' : 'trips.status.upcoming') | translate }}
+        </span>
+        @if (!heroCoverImageUrl()) {
+          <ion-icon name="airplane" class="hero__watermark" aria-hidden="true"></ion-icon>
+        }
+        <h2 class="hero__title">{{ trip.title }}</h2>
+        @if (tripProgressLabel(); as progress) {
+          <p class="hero__meta">{{ progress }}</p>
+        }
+        <p class="hero__dates">{{ trip.dates.start | appDateRange: trip.dates.end }}</p>
+        <span class="hero__cta app-btn-primary">{{ 'today.openTrip' | translate }}</span>
+      </a>
+
+      @if (upcomingItems().length > 0) {
+        <h2 class="app-section-title">{{ 'today.comingUp' | translate }}</h2>
+        <app-timeline [items]="upcomingItems()"></app-timeline>
+      }
+
+      @if (reminderService.due().length > 0) {
+        <h2 class="app-section-title">{{ 'today.dueReminders' | translate }}</h2>
+        <div class="app-card">
+          @for (reminder of reminderService.due(); track reminder.id) {
+            <p class="reminder-line">
+              <ion-icon name="alarm-outline" class="app-category--reminder"></ion-icon>
+              {{ reminder.message }}
+            </p>
+          }
+        </div>
+      }
+
+      @if (hasChecklistData()) {
+        <h2 class="app-section-title">{{ 'today.checklist' | translate }}</h2>
+        <div class="app-card">
+          <p class="checklist-line">
+            <ion-icon name="checkbox-outline" class="app-category--checklist"></ion-icon>
+            {{ 'today.pendingItems' | translate: { count: checklistService.pendingCount() } }}
+          </p>
+          <div class="app-storage-meter__track">
+            <div class="app-storage-meter__fill" [style.width.%]="checklistPercent()"></div>
+          </div>
+          <a class="checklist-link" [routerLink]="['/tabs/trips', trip.id, 'checklists']">
+            {{ 'today.openChecklist' | translate }}
+          </a>
+        </div>
+      }
+
+      <h2 class="app-section-title">{{ 'today.quickActions' | translate }}</h2>
+      <div class="quick-actions">
+        <ion-button class="app-btn-secondary" fill="outline" expand="block" [routerLink]="['/tabs/trips', trip.id, 'expenses']">
+          <ion-icon slot="start" name="wallet-outline"></ion-icon>
+          {{ 'today.addExpense' | translate }}
+        </ion-button>
+        <ion-button class="app-btn-secondary" fill="outline" expand="block" [routerLink]="['/tabs/trips', trip.id, 'documents']">
+          <ion-icon slot="start" name="folder-outline"></ion-icon>
+          {{ 'today.addDoc' | translate }}
+        </ion-button>
+      </div>
+    } @else {
+      <app-empty-state
+        icon="airplane-outline"
+        [title]="'today.emptyTitle' | translate"
+        [message]="'today.noActiveTrip' | translate"
+        [ctaLabel]="'today.emptyCta' | translate"
+        (cta)="goToNewTrip()"
+      ></app-empty-state>
+    }
+  </div>
+</ion-content>

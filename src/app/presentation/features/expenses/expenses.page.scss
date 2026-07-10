@@ -1,0 +1,47 @@
+.error {
+  color: var(--ion-color-danger);
+  padding: 0 1rem;
+}
+
+.total-line {
+  margin: 0 0 var(--app-space-sm);
+}
+
+.summary-subtitle {
+  margin: var(--app-space-sm) 0 var(--app-space-xs);
+  font-size: 0.9rem;
+  color: var(--app-on-surface-muted);
+}
+
+.summary {
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+}
+
+.expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.expense-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  margin-right: var(--app-space-sm);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--app-on-surface-muted);
+}

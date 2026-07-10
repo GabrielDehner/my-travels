@@ -1,0 +1,62 @@
+.place-dates {
+  margin: 0;
+  padding: var(--app-space-sm) var(--app-space-md) 0;
+  color: var(--app-on-surface-muted);
+  font-size: 0.85rem;
+}
+
+.place-country {
+  margin: 2px 0 0;
+  padding: 0 var(--app-space-md);
+  color: var(--app-on-surface-muted);
+  font-size: 0.85rem;
+}
+
+.error {
+  color: var(--ion-color-danger);
+  padding: 0 1rem;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: var(--app-space-sm);
+}
+
+.logistics-card {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: var(--app-space-sm);
+
+    h3 {
+      flex: 1 1 auto;
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.logistics-icon {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 7px;
+  color: #ffffff;
+}
+
+.logistics-meta {
+  margin: 4px 0;
+  color: var(--app-on-surface-muted);
+  font-size: 0.85rem;
+}
+
+.logistics-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--app-space-sm);
+  margin-top: var(--app-space-sm);
+}

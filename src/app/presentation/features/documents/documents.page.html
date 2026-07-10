@@ -1,0 +1,150 @@
+<!--
+  Content FRAGMENT (UI iteration 4, FIX 2): no outer `ion-content` here —
+  this renders inside the parent `TripDetailPage`'s single shared
+  `ion-content` via a plain `router-outlet`, so there is exactly one scroll
+  container for the whole trip-detail shell and no header/section-nav
+  overlap.
+-->
+<div class="app-page-content">
+    @if (!hasTripContext()) {
+      <app-empty-state
+        icon="folder-outline"
+        [title]="'documents.noTripTitle' | translate"
+        [message]="'documents.noTripMessage' | translate"
+        [ctaLabel]="'documents.noTripCta' | translate"
+        (cta)="goToTrips()"
+      ></app-empty-state>
+    } @else {
+      @if (documentService.error(); as error) {
+        <p class="error">{{ error }}</p>
+      }
+
+      <div class="app-card upload-form">
+        <h2 class="app-text-title">{{ 'documents.addFile' | translate }}</h2>
+        <ion-button class="app-btn-secondary" fill="outline" expand="block" (click)="fileInput.click()">
+          <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+          {{ selectedFile()?.name ?? ('documents.chooseFile' | translate) }}
+        </ion-button>
+        <input
+          #fileInput
+          class="app-hidden-file-input"
+          type="file"
+          accept="image/*,.pdf,application/pdf"
+          (change)="onFileSelected($event)"
+        />
+
+        @if (uploadError(); as error) {
+          <p class="error">{{ error }}</p>
+        }
+
+        <ion-item lines="none">
+          <ion-label position="stacked">{{ 'documents.titleLabel' | translate }}</ion-label>
+          <ion-input
+            type="text"
+            [ngModel]="uploadTitle()"
+            (ngModelChange)="uploadTitle.set($event)"
+            [placeholder]="'documents.titlePlaceholder' | translate"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-label position="stacked">{{ 'documents.category' | translate }}</ion-label>
+          <ion-select
+            [ngModel]="uploadCategory()"
+            (ngModelChange)="uploadCategory.set($event)"
+            interface="popover"
+          >
+            @for (option of categoryOptions(); track option.value) {
+              <ion-select-option [value]="option.value">
+                {{ option.label }}
+              </ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+
+        @if (hotelOptions().length > 0) {
+          <ion-item lines="none">
+            <ion-label position="stacked">{{ 'documents.attachLodging' | translate }}</ion-label>
+            <ion-select
+              [ngModel]="attachToHotelId()"
+              (ngModelChange)="attachToHotelId.set($event)"
+              interface="popover"
+            >
+              <ion-select-option value="">{{ 'common.none' | translate }}</ion-select-option>
+              @for (hotel of hotelOptions(); track hotel.id) {
+                <ion-select-option [value]="hotel.id">{{ hotel.label }}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+        }
+
+        <ion-button class="app-btn-primary" expand="block" [disabled]="uploading()" (click)="upload()">
+          {{ 'documents.addFile' | translate }}
+        </ion-button>
+      </div>
+
+      @if (groupedDocuments().length === 0) {
+        <app-empty-state
+          icon="folder-outline"
+          [title]="'documents.emptyTitle' | translate"
+          [message]="'documents.empty' | translate"
+        ></app-empty-state>
+      }
+
+      @for (group of groupedDocuments(); track group.category) {
+        <h2 class="app-section-title">{{ group.label }}</h2>
+        <div class="app-grid">
+          @for (doc of group.documents; track doc.id) {
+            <div class="app-card doc-card">
+              @if (renamingId() === doc.id) {
+                <ion-input
+                  type="text"
+                  [ngModel]="renameValue()"
+                  (ngModelChange)="renameValue.set($event)"
+                ></ion-input>
+                <div class="doc-actions">
+                  <ion-button size="small" (click)="confirmRename(doc)">
+                    {{ 'common.save' | translate }}
+                  </ion-button>
+                  <ion-button size="small" fill="clear" (click)="cancelRename()">
+                    {{ 'common.cancel' | translate }}
+                  </ion-button>
+                </div>
+              } @else {
+                <h3 class="doc-title">{{ doc.title }}</h3>
+                <p class="doc-meta">{{ doc.fileName }} - {{ doc.mimeType }}</p>
+                @if (attachedLabel(doc); as attached) {
+                  <p class="doc-meta">{{ attached }}</p>
+                }
+
+                <ion-select
+                  class="doc-category"
+                  [ngModel]="doc.category"
+                  (ngModelChange)="moveToCategory(doc, $event)"
+                  interface="popover"
+                >
+                  @for (option of categoryOptions(); track option.value) {
+                    <ion-select-option [value]="option.value">
+                      {{ option.label }}
+                    </ion-select-option>
+                  }
+                </ion-select>
+
+                <div class="doc-actions">
+                  <ion-button fill="clear" (click)="openDocument(doc)">
+                    <ion-icon slot="icon-only" name="open-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" (click)="startRename(doc)">
+                    <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" color="danger" (click)="deleteDocument(doc)">
+                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                  </ion-button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>

@@ -1,0 +1,49 @@
+.error {
+  color: var(--ion-color-danger);
+  padding: 0 1rem;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  h2 {
+    margin: 0 0 var(--app-space-xs);
+  }
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--app-on-surface-muted);
+}
+
+.doc-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-title {
+  margin: 0 0 4px;
+}
+
+.doc-meta {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  color: var(--app-on-surface-muted);
+}
+
+.doc-category {
+  margin-top: var(--app-space-xs);
+}
+
+.doc-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  margin-top: var(--app-space-xs);
+}

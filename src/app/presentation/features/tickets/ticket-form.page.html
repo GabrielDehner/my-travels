@@ -1,0 +1,179 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [defaultHref]="'/tabs/trips/' + tripId() + '/destinations/' + destinationId()"
+        text=""
+        [attr.aria-label]="'common.back' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (isEditMode() ? 'ticketForm.editTitle' : 'ticketForm.newTitle') | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content app-card">
+    @if (formError(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.title' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="title()"
+        (ngModelChange)="title.set($event)"
+        [placeholder]="'ticketForm.titlePlaceholder' | translate"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.type' | translate }}</ion-label>
+      <ion-select
+        [ngModel]="type()"
+        (ngModelChange)="type.set($event)"
+        interface="popover"
+        [selectedText]="selectedTypeLabel()"
+      >
+        @for (option of typeOptions(); track option.value) {
+          <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
+    <h2 class="app-section-title">{{ 'ticketForm.reservation' | translate }}</h2>
+
+    <ion-segment [value]="reservationMode()" (ionChange)="onReservationModeChange($event)">
+      <ion-segment-button value="file">
+        <ion-label>{{ 'ticketForm.reservationFile' | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="link">
+        <ion-label>{{ 'ticketForm.reservationLink' | translate }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    @if (reservationMode() === 'file') {
+      @if (attachedFile(); as doc) {
+        <ion-item lines="none" button (click)="openAttachedFile()">
+          <ion-icon slot="start" name="document-attach-outline"></ion-icon>
+          <ion-label>{{ doc.title }}</ion-label>
+        </ion-item>
+      }
+      <ion-button
+        class="app-btn-secondary"
+        fill="outline"
+        expand="block"
+        (click)="fileInput.click()"
+      >
+        <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+        {{ pendingFile()?.name ?? ('ticketForm.chooseFile' | translate) }}
+      </ion-button>
+      <input
+        #fileInput
+        class="app-hidden-file-input"
+        type="file"
+        accept="image/*,.pdf,application/pdf"
+        (change)="onFileSelected($event)"
+      />
+    } @else {
+      <ion-item>
+        <ion-label position="stacked">{{ 'ticketForm.reservationLink' | translate }}</ion-label>
+        <ion-input
+          type="url"
+          [ngModel]="bookingUrl()"
+          (ngModelChange)="bookingUrl.set($event)"
+          [placeholder]="'ticketForm.reservationLinkPlaceholder' | translate"
+        ></ion-input>
+      </ion-item>
+    }
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.company' | translate }}</ion-label>
+      <ion-input type="text" [ngModel]="company()" (ngModelChange)="company.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.number' | translate }}</ion-label>
+      <ion-input type="text" [ngModel]="number()" (ngModelChange)="number.set($event)"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.departAt' | translate }}</ion-label>
+      <ion-input
+        type="datetime-local"
+        [ngModel]="departAt()"
+        (ngModelChange)="departAt.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.arriveAt' | translate }}</ion-label>
+      <ion-input
+        type="datetime-local"
+        [ngModel]="arriveAt()"
+        (ngModelChange)="arriveAt.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.seat' | translate }}</ion-label>
+      <ion-input type="text" [ngModel]="seat()" (ngModelChange)="seat.set($event)"></ion-input>
+    </ion-item>
+
+    <h2 class="app-section-title">{{ 'ticketForm.terminal' | translate }}</h2>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.terminalAddress' | translate }}</ion-label>
+      <ion-input
+        type="text"
+        [ngModel]="terminalAddress()"
+        (ngModelChange)="terminalAddress.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.terminalLatitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="terminalLatitude()"
+        (ngModelChange)="terminalLatitude.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.terminalLongitude' | translate }}</ion-label>
+      <ion-input
+        type="number"
+        [ngModel]="terminalLongitude()"
+        (ngModelChange)="terminalLongitude.set($event)"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.mapsUrl' | translate }}</ion-label>
+      <ion-input
+        type="url"
+        [ngModel]="mapsUrl()"
+        (ngModelChange)="mapsUrl.set($event)"
+        [placeholder]="'ticketForm.mapsUrlPlaceholder' | translate"
+      ></ion-input>
+      <p class="app-text-caption">{{ 'ticketForm.mapsUrlHint' | translate }}</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">{{ 'ticketForm.notes' | translate }}</ion-label>
+      <ion-textarea [ngModel]="notes()" (ngModelChange)="notes.set($event)" autoGrow="true"></ion-textarea>
+    </ion-item>
+
+    <div class="actions">
+      <ion-button expand="block" [disabled]="saving()" (click)="save()">
+        {{ (isEditMode() ? 'ticketForm.saveChanges' : 'ticketForm.addTicket') | translate }}
+      </ion-button>
+      <ion-button expand="block" fill="clear" [disabled]="saving()" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

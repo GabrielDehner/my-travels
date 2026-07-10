@@ -1,0 +1,107 @@
+<ion-header [translucent]="true" class="app-gradient-header">
+  <ion-toolbar>
+    <ion-title>{{ 'settings.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="app-page-content">
+    <h2 class="app-section-title">{{ 'settings.appearance' | translate }}</h2>
+    <div class="app-card">
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'settings.theme' | translate }}</ion-label>
+        <ion-select
+          [ngModel]="themeService.preference()"
+          (ngModelChange)="onThemeChange($event)"
+          interface="popover"
+        >
+          <ion-select-option value="system">{{
+            'settings.themeSystem' | translate
+          }}</ion-select-option>
+          <ion-select-option value="light">{{
+            'settings.themeLight' | translate
+          }}</ion-select-option>
+          <ion-select-option value="dark">{{ 'settings.themeDark' | translate }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'settings.language' | translate }}</ion-label>
+        <ion-select
+          [ngModel]="languageService.current()"
+          (ngModelChange)="onLanguageChange($event)"
+          interface="popover"
+        >
+          <ion-select-option value="es">{{ 'settings.languageEs' | translate }}</ion-select-option>
+          <ion-select-option value="en">{{ 'settings.languageEn' | translate }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <h2 class="app-section-title">{{ 'settings.storage' | translate }}</h2>
+    <div class="app-card">
+      @if (quota(); as q) {
+        <div class="storage-info">
+          <p class="storage-figures">{{ formatBytes(q.usage) }} / {{ formatBytes(q.quota) }}</p>
+          <ion-progress-bar
+            [value]="usageRatio()"
+            [color]="usageWarn() ? 'warning' : 'primary'"
+          ></ion-progress-bar>
+          @if (usageWarn()) {
+            <p class="warning">{{ 'settings.storageWarning' | translate }}</p>
+          }
+        </div>
+      } @else {
+        <p class="empty-note">{{ 'settings.storageUnavailable' | translate }}</p>
+      }
+    </div>
+
+    <h2 class="app-section-title">{{ 'settings.backup' | translate }}</h2>
+    <div class="app-card">
+      @if (travelService.trips().length > 0) {
+        <ion-item lines="none">
+          <ion-label position="stacked">{{ 'settings.tripToExport' | translate }}</ion-label>
+          <ion-select
+            [ngModel]="selectedTripId()"
+            (ngModelChange)="selectedTripId.set($event)"
+            interface="popover"
+          >
+            @for (trip of travelService.trips(); track trip.id) {
+              <ion-select-option [value]="trip.id">{{ trip.title }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+        <ion-button
+          expand="block"
+          [disabled]="tripArchiveFacade.loading()"
+          (click)="exportSelectedTrip()"
+        >
+          <ion-icon slot="start" name="cloud-download-outline"></ion-icon>
+          {{ 'settings.exportTrip' | translate }}
+        </ion-button>
+      } @else {
+        <p class="empty-note">{{ 'settings.noTripsToExport' | translate }}</p>
+      }
+
+      @if (exportStatus(); as status) {
+        <p class="status">{{ status }}</p>
+      }
+
+      <ion-button expand="block" fill="outline" (click)="triggerImport()">
+        <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+        {{ 'settings.importTrip' | translate }}
+      </ion-button>
+      <input
+        #importInput
+        class="app-hidden-file-input"
+        type="file"
+        accept=".zip,application/zip"
+        (change)="onImportFileSelected($event)"
+      />
+
+      @if (importStatus(); as status) {
+        <p class="status">{{ status }}</p>
+      }
+    </div>
+  </div>
+</ion-content>

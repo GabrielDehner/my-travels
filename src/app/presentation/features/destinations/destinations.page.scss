@@ -1,0 +1,47 @@
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: var(--app-on-surface-muted);
+}
+
+.destination-row {
+  margin: 0 0 0 var(--app-space-md);
+  padding-right: var(--app-space-md);
+}
+
+.destination-card {
+  cursor: pointer;
+}
+
+.lodging-line {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  ion-icon {
+    font-size: 0.9rem;
+    border-radius: 50%;
+    padding: 3px;
+    color: #ffffff;
+  }
+}
+
+.no-lodging {
+  font-style: italic;
+}
+
+.destination-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  margin-top: var(--app-space-xs);
+}
+
+.error {
+  color: var(--ion-color-danger);
+  padding: 0 1rem;
+}

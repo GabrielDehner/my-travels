@@ -1,0 +1,110 @@
+<!--
+  Content FRAGMENT (UI iteration 4, FIX 2): no outer `ion-content` here —
+  renders inside the parent `TripDetailPage`'s single shared `ion-content`.
+-->
+<div class="app-page-content">
+    @if (checklistService.error(); as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <div class="app-card new-checklist">
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ 'checklists.newChecklist' | translate }}</ion-label>
+        <ion-input
+          type="text"
+          [ngModel]="newChecklistTitle()"
+          (ngModelChange)="newChecklistTitle.set($event)"
+          [placeholder]="'checklists.newChecklistPlaceholder' | translate"
+        ></ion-input>
+      </ion-item>
+      <ion-button (click)="createChecklist()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        {{ 'checklists.addList' | translate }}
+      </ion-button>
+    </div>
+
+    @if (checklistService.checklists().length === 0) {
+      <app-empty-state
+        icon="checkbox-outline"
+        [title]="'checklists.emptyTitle' | translate"
+        [message]="'checklists.empty' | translate"
+      ></app-empty-state>
+    } @else {
+      <div class="checklist-chips">
+        @for (checklist of checklistService.checklists(); track checklist.id) {
+          <ion-chip
+            [outline]="selectedChecklistId() !== checklist.id"
+            (click)="selectChecklist(checklist.id)"
+          >
+            {{ checklist.title }}
+          </ion-chip>
+        }
+      </div>
+    }
+
+    @if (selectedChecklist(); as checklist) {
+      <div class="app-card items-section">
+        <h2 class="checklist-name">{{ checklist.title }}</h2>
+
+        @if (selectedItems().length > 0) {
+          <p class="progress-line">
+            {{
+              'checklists.progressLine'
+                | translate
+                  : {
+                      done: selectedItems().length - pendingCount(),
+                      total: selectedItems().length,
+                      pending: pendingCount(),
+                    }
+            }}
+          </p>
+          <ion-progress-bar [value]="progressRatio()"></ion-progress-bar>
+        }
+
+        <div class="add-item">
+          <ion-item lines="none">
+            <ion-label position="stacked">{{ 'checklists.newItem' | translate }}</ion-label>
+            <ion-input
+              type="text"
+              [ngModel]="newItemLabel()"
+              (ngModelChange)="newItemLabel.set($event)"
+              [placeholder]="'checklists.newItemPlaceholder' | translate"
+            ></ion-input>
+          </ion-item>
+          <ion-button (click)="addItem()">
+            <ion-icon slot="start" name="add"></ion-icon>
+            {{ 'checklists.addItem' | translate }}
+          </ion-button>
+        </div>
+
+        <ion-list lines="none">
+          @for (item of selectedItems(); track item.id) {
+            <ion-item-sliding #slidingItem>
+              <ion-item>
+                <ion-checkbox
+                  slot="start"
+                  [checked]="item.done"
+                  (ionChange)="toggleItem(item)"
+                ></ion-checkbox>
+                <ion-label [class.done]="item.done">{{ item.label }}</ion-label>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteItem(item, slidingItem)">
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          }
+        </ion-list>
+      </div>
+
+      <ion-button
+        class="delete-checklist"
+        fill="clear"
+        color="danger"
+        (click)="deleteChecklist(checklist.id)"
+      >
+        {{ 'checklists.deleteChecklist' | translate }}
+      </ion-button>
+    }
+  </div>

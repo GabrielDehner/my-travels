@@ -1,0 +1,47 @@
+.error {
+  color: var(--ion-color-danger);
+  padding: 0 1rem;
+}
+
+.new-checklist,
+.add-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checklist-name {
+  margin: 0 0 var(--app-space-sm);
+}
+
+.progress-line {
+  color: var(--app-on-surface-muted);
+  font-size: 0.85rem;
+  margin: 0 0 var(--app-space-xs);
+}
+
+.checklist-chips {
+  padding: 0 var(--app-space-md) var(--app-space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.done {
+  text-decoration: line-through;
+  color: var(--app-on-surface-muted);
+}
+
+.delete-checklist {
+  display: block;
+  margin: 0 var(--app-space-md) var(--app-space-md);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--app-on-surface-muted);
+}

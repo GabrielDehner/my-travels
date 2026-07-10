@@ -1,0 +1,64 @@
+<!--
+  IMPORTANT: this header MUST NOT be `[translucent]="true"`. A translucent
+  `ion-header` becomes `position: fixed`, which only stacks safely above a
+  DIRECT sibling `ion-content` in the SAME `.ion-page`. Kept opaque so it
+  participates in normal flex flow: header takes its natural height, and
+  the single `ion-content` below (see structural fix comment on the
+  `ion-content` below) fills the remaining space beneath it.
+-->
+<ion-header class="app-gradient-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="/tabs/trips"
+        text=""
+        [attr.aria-label]="'common.back' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ trip()?.title ?? ('tripDetail.fallbackTitle' | translate) }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/tabs/trips', tripId(), 'edit']">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  @if (trip(); as currentTrip) {
+    <ion-toolbar>
+      <p class="dates">{{ currentTrip.dates.start | appDateRange: currentTrip.dates.end }}</p>
+    </ion-toolbar>
+  }
+  <ion-toolbar>
+    <app-section-nav
+      [items]="sectionItems"
+      [active]="activeSegment()"
+      (sectionChange)="onSegmentChange($event)"
+    ></app-section-nav>
+  </ion-toolbar>
+</ion-header>
+
+<!--
+  DEFINITIVE structural fix (UI iteration 4, FIX 2): this MUST be a single
+  shared `ion-content` wrapping a PLAIN `<router-outlet>`, never
+  `ion-router-outlet` as a sibling of the header. `ion-router-outlet` is
+  absolutely positioned to fill the whole `.ion-page` from `top: 0`, so any
+  content it routes to renders UNDER the header regardless of translucency
+  — that was the real cause of child content (empty states, cards, the
+  upload form) overlapping the "Lugares/Plan/Archivos/Listas/Dinero"
+  section-nav row.
+
+  Each section page (documents, destinations, itinerary, checklists,
+  expenses) had its own outer `ion-content` REMOVED — they now render as
+  plain content fragments (their `.app-page-content` block, empty states,
+  cards, fabs) directly inside THIS `ion-content`, below the header, in one
+  scroll container. This also means there's no `ion-content`-inside-
+  `ion-content` nesting (the old "can't add a document" bug's structure),
+  since there is only ever ONE `ion-content` in this page's tree.
+
+  Full-page routes that need their OWN header + no section-nav (destination
+  form, lodging form, lodging list) are no longer children of this route at
+  all — they're flat sibling routes in `tabs.routes.ts` so they never render
+  inside this shell.
+-->
+<ion-content>
+  <router-outlet></router-outlet>
+</ion-content>
