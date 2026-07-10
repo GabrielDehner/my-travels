@@ -51,18 +51,35 @@ ion-content {
 /*
  * Action-sheet label contrast fix (trip card "..." overflow menu, and every
  * other `ion-action-sheet` in the app — destinations, destination detail,
- * lodging). Ionic's own MD-mode default for `--button-color` resolves
- * through an undefined `--ion-color-step-850` / `--ion-text-color-step-150`
- * chain down to a HARDCODED `#262626`, regardless of theme — on this app's
- * dark surfaces that renders near-invisible/"disabled-looking" label text
- * next to a normal-contrast icon (icon uses `--color`, which DOES resolve
- * through our theme's `--ion-text-color-rgb`). Overriding both variables to
- * the same on-surface token keeps icon + label at matching full contrast in
- * both light and dark themes, app-wide, without touching each call site.
+ * lodging). ROOT CAUSE (confirmed via live computed-style inspection, not
+ * guessed): Ionic's own MD-mode component style declares
+ * `--button-color`/`--color` on the HOST CLASS SELECTOR `.sc-ion-action-
+ * sheet-md-h` (specificity 0-1-0), which beats a plain-element selector
+ * `ion-action-sheet {...}` (specificity 0-0-1) REGARDLESS of stylesheet
+ * source order — a class selector always outranks a type selector. So the
+ * previous attempt to override these two variables via `ion-action-sheet
+ * { --button-color: ...; --color: ...; }` was silently LOSING the
+ * cascade and never took effect at all: `--button-color` kept resolving
+ * through Ionic's own undefined `--ion-color-step-850` /
+ * `--ion-text-color-step-150` fallback chain down to a HARDCODED `#262626`
+ * (confirmed live: computed label color was literally `rgb(38, 38, 38)`,
+ * i.e. `#262626`), which is near-invisible on this app's dark surfaces —
+ * while the icon's `--color` coincidentally still looked visible because
+ * Ionic's own fallback (`rgba(var(--ion-text-color-rgb), 0.54)`) resolves
+ * against OUR theme's light `--ion-text-color-rgb`, giving a dim-but-
+ * visible `rgba(238, 241, 248, 0.54)`. Adding `!important` makes our
+ * override win regardless of the class-vs-type specificity gap, so the
+ * label ("Editar"/"Cancelar") reaches the SAME full-contrast on-surface
+ * token as the icon, in both light and dark themes, app-wide, without
+ * touching each call site. The destructive "Eliminar" button keeps its
+ * danger-red color untouched because it's set via an inline
+ * `htmlAttributes.style` on that specific button (inline style always
+ * outranks both class and `!important`-less rules, and is itself
+ * effectively final here since nothing else targets that element inline).
  */
 ion-action-sheet {
-  --button-color: var(--app-on-surface);
-  --color: var(--app-on-surface);
+  --button-color: var(--app-on-surface) !important;
+  --color: var(--app-on-surface) !important;
 }
 
 /**

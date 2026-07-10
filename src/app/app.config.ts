@@ -60,7 +60,12 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({
       lang: resolveInitialLanguage(),
       fallbackLang: 'en',
-      loader: provideTranslateHttpLoader({ prefix: '/assets/i18n/', suffix: '.json' }),
+      // Relative prefix (no leading slash) so it resolves against <base href>.
+      // Under GitHub Pages the base href is /<repo>/, so an absolute '/assets/i18n/'
+      // would 404 (fetching from the domain root) and translations would fall back
+      // to raw keys. './assets/i18n/' resolves to /<repo>/assets/i18n/ in prod and
+      // /assets/i18n/ in dev.
+      loader: provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
     }),
     ...provideDataLayer(),
     // PWA installability + app-shell caching (offline data itself is already
