@@ -256,6 +256,40 @@ ion-action-sheet {
   text-transform: none;
 }
 
+/*
+ * Icon-only utility buttons — circular shape unification (UI consistency
+ * fix). `ion-button` renders icon-only buttons SQUARE with a small corner
+ * radius by default (confirmed in @ionic/core's button.md.css:
+ * `.button-has-icon-only` only equalizes width/height via `min-width`/
+ * `min-height` clamp(); it never sets `--border-radius` to a circle, so it
+ * stays at the base `4px`). Apply `.app-icon-btn` to every icon-only
+ * `ion-button` (header actions, "..." overflow menus, document row
+ * actions, remove-file buttons) so they match the already-circular
+ * `ion-fab-button` / `.app-timeline-dot`. Never applied to text/CTA
+ * buttons — those keep their pill shape untouched.
+ */
+.app-icon-btn {
+  --border-radius: 50%;
+  --box-shadow: none;
+  min-width: 40px;
+  min-height: 40px;
+  margin: 0;
+}
+
+/*
+ * `ion-back-button` already renders circular in MD mode via Ionic's own
+ * `.back-button-has-icon-only` rule (confirmed in back-button.md.css), but
+ * iOS mode keeps the native chevron-only look with no forced circle or
+ * minimum size. Force it consistently app-wide (every back button in this
+ * app is icon-only, `text=""`) so it matches every other icon-only control
+ * regardless of platform mode.
+ */
+ion-back-button {
+  --border-radius: 50%;
+  --min-width: 40px;
+  --min-height: 40px;
+}
+
 /* --- Chips / badges (task C7) ------------------------------------------ */
 .app-chip {
   display: inline-flex;

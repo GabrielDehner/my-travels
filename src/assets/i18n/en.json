@@ -297,6 +297,10 @@
     "empty": "No expenses yet. Add one above.",
     "recent": "Recent",
     "validAmount": "Enter a valid amount.",
+    "receiptPhoto": "Receipt photo",
+    "receiptPick": "Take/choose photo",
+    "removeReceipt": "Remove",
+    "viewReceipt": "View receipt",
     "categories": {
       "food": "Food",
       "lodging": "Lodging",

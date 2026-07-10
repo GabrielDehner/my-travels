@@ -41,4 +41,14 @@ export class IndexedDBExpenseRepository implements ExpenseRepository {
     );
     return records.filter((r) => r.deletedAt === null).map((r) => this.mapper.toEntity(r));
   }
+
+  async saveReceipt(expenseId: string, blob: Blob): Promise<string> {
+    const receiptBlobId = `receipt-${expenseId}`;
+    await this.storage.blobs.put(receiptBlobId, blob);
+    return receiptBlobId;
+  }
+
+  async getReceipt(receiptBlobId: string): Promise<Blob | undefined> {
+    return this.storage.blobs.get(receiptBlobId);
+  }
 }

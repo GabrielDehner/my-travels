@@ -297,6 +297,10 @@
     "empty": "Aún no hay gastos. Añade uno arriba.",
     "recent": "Recientes",
     "validAmount": "Ingresa un monto válido.",
+    "receiptPhoto": "Foto del ticket",
+    "receiptPick": "Sacar/elegir foto",
+    "removeReceipt": "Quitar",
+    "viewReceipt": "Ver ticket",
     "categories": {
       "food": "Comida",
       "lodging": "Alojamiento",

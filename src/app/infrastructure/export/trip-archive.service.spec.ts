@@ -115,6 +115,8 @@ class FakeExpenseRepository implements ExpenseRepository {
   }
   save = notImplemented;
   softDelete = notImplemented;
+  saveReceipt = notImplemented;
+  getReceipt = notImplemented;
   async query(_spec: QuerySpec<Expense>): Promise<Expense[]> {
     return this.expenses;
   }

@@ -14,4 +14,10 @@ export interface Expense extends BaseEntity {
   approxUsd?: Money;
   date: string;
   description?: string;
+  /**
+   * Id of the attached receipt photo blob, if any (feature: receipt photo on
+   * expenses). Mirrors `Travel.coverImageId` — the blob itself lives in
+   * `StorageProvider.blobs`, never inline on the entity/record.
+   */
+  receiptBlobId?: string;
 }

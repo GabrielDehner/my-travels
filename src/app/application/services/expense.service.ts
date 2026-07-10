@@ -97,4 +97,32 @@ export class ExpenseService {
       this.error.set(toErrorMessage(err));
     }
   }
+
+  /**
+   * Stores a receipt photo for an expense and links it via `receiptBlobId`
+   * (feature: receipt photo on expenses). Mirrors `TravelService.setCoverImage`
+   * — presentation never touches `StorageProvider` directly.
+   */
+  async setReceipt(expense: Expense, blob: Blob): Promise<void> {
+    try {
+      const receiptBlobId = await this.repo.saveReceipt(expense.id, blob);
+      const updated: Expense = { ...expense, receiptBlobId, ...touchTimestamps() };
+      await this.repo.save(updated);
+      await this.load(expense.travelId);
+    } catch (err) {
+      this.error.set(toErrorMessage(err));
+    }
+  }
+
+  /** Resolves an expense's receipt photo as a revocable object URL, or `undefined` if none is set. */
+  async getReceiptUrl(expense: Expense): Promise<string | undefined> {
+    if (!expense.receiptBlobId) return undefined;
+    try {
+      const blob = await this.repo.getReceipt(expense.receiptBlobId);
+      return blob ? URL.createObjectURL(blob) : undefined;
+    } catch (err) {
+      this.error.set(toErrorMessage(err));
+      return undefined;
+    }
+  }
 }

@@ -17,7 +17,7 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { trashOutline, cashOutline } from 'ionicons/icons';
+import { trashOutline, cashOutline, cameraOutline, closeCircle, eyeOutline } from 'ionicons/icons';
 
 import { DestinationService } from '../../../application/services/destination.service';
 import { ExpenseService } from '../../../application/services/expense.service';
@@ -127,6 +127,13 @@ export class ExpensesPage implements OnInit {
   protected readonly formError = signal<string | null>(null);
   protected readonly saving = signal(false);
 
+  /** The newly-picked receipt photo file, if any — stored via `setReceipt` after the expense saves. */
+  protected readonly selectedReceiptFile = signal<File | null>(null);
+  /** Local object URL preview for the newly-picked receipt file — revoked on replace/remove/destroy. */
+  protected readonly receiptPreviewUrl = signal<string | null>(null);
+  /** Object URLs for already-saved receipts, keyed by expense id — revoked when no longer needed/on destroy. */
+  protected readonly receiptUrls = signal<Map<string, string>>(new Map());
+
   protected readonly recentExpenses = computed(() =>
     [...this.expenseService.expenses()].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -175,7 +182,12 @@ export class ExpensesPage implements OnInit {
   });
 
   constructor() {
-    addIcons({ trashOutline, cashOutline });
+    addIcons({ trashOutline, cashOutline, cameraOutline, closeCircle, eyeOutline });
+    this.destroyRef.onDestroy(() => {
+      const preview = this.receiptPreviewUrl();
+      if (preview) URL.revokeObjectURL(preview);
+      for (const url of this.receiptUrls().values()) URL.revokeObjectURL(url);
+    });
   }
 
   ngOnInit(): void {
@@ -184,7 +196,9 @@ export class ExpensesPage implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((tripId) => {
         this.tripId.set(tripId);
-        void Promise.all([this.expenseService.load(tripId), this.destinationService.load(tripId)]);
+        void Promise.all([this.expenseService.load(tripId), this.destinationService.load(tripId)]).then(
+          () => this.refreshReceiptUrls(),
+        );
       });
   }
 
@@ -201,7 +215,7 @@ export class ExpensesPage implements OnInit {
       const destinationId = this.destinationId();
       const description = this.description().trim();
 
-      await this.expenseService.create({
+      const created = await this.expenseService.create({
         travelId: this.tripId(),
         category: this.category(),
         amount: createMoney(Math.round(amountValue * 100), this.currency()),
@@ -210,8 +224,15 @@ export class ExpensesPage implements OnInit {
         ...(description ? { description } : {}),
       });
 
+      const receiptFile = this.selectedReceiptFile();
+      if (receiptFile && created) {
+        await this.expenseService.setReceipt(created, receiptFile);
+      }
+
       this.amount.set('');
       this.description.set('');
+      this.clearReceiptSelection();
+      await this.refreshReceiptUrls();
     } finally {
       this.saving.set(false);
     }
@@ -220,6 +241,60 @@ export class ExpensesPage implements OnInit {
   async deleteExpense(expense: Expense, slidingItem: IonItemSliding): Promise<void> {
     await slidingItem.close();
     await this.expenseService.softDelete(expense.id, this.tripId());
+    await this.refreshReceiptUrls();
+  }
+
+  /** Handles the "Receipt photo" file picker — camera on mobile via `capture="environment"`. */
+  protected onReceiptFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    const previous = this.receiptPreviewUrl();
+    if (previous) URL.revokeObjectURL(previous);
+
+    this.selectedReceiptFile.set(file);
+    this.receiptPreviewUrl.set(file ? URL.createObjectURL(file) : null);
+  }
+
+  /** Clears the not-yet-saved receipt selection (revokes its preview URL). */
+  protected clearReceiptSelection(): void {
+    const previous = this.receiptPreviewUrl();
+    if (previous) URL.revokeObjectURL(previous);
+    this.selectedReceiptFile.set(null);
+    this.receiptPreviewUrl.set(null);
+  }
+
+  /** Opens a saved expense's receipt photo in a new tab/viewer. */
+  protected viewReceipt(expenseId: string): void {
+    const url = this.receiptUrls().get(expenseId);
+    if (url) window.open(url, '_blank', 'noopener');
+  }
+
+  /**
+   * Resolves an object URL for every expense that has a saved receipt,
+   * reusing already-resolved URLs and revoking ones that are no longer
+   * needed (expense deleted or receipt removed).
+   */
+  private async refreshReceiptUrls(): Promise<void> {
+    const current = this.receiptUrls();
+    const next = new Map<string, string>();
+
+    for (const expense of this.expenseService.expenses()) {
+      if (!expense.receiptBlobId) continue;
+      const existing = current.get(expense.id);
+      if (existing) {
+        next.set(expense.id, existing);
+        continue;
+      }
+      const url = await this.expenseService.getReceiptUrl(expense);
+      if (url) next.set(expense.id, url);
+    }
+
+    for (const [id, url] of current.entries()) {
+      if (!next.has(id)) URL.revokeObjectURL(url);
+    }
+
+    this.receiptUrls.set(next);
   }
 
   protected formatMoney(money: Money): string {

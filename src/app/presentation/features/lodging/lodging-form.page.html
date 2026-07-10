@@ -82,7 +82,7 @@
       <ion-item lines="none">
         <ion-icon slot="start" name="document-attach-outline"></ion-icon>
         <ion-label>{{ file.name }}</ion-label>
-        <ion-button slot="end" fill="clear" (click)="removePendingFile(file)">
+        <ion-button class="app-icon-btn" slot="end" fill="clear" (click)="removePendingFile(file)">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       </ion-item>
@@ -93,6 +93,7 @@
         <ion-icon slot="start" name="document-attach-outline"></ion-icon>
         <ion-label>{{ doc.title }}</ion-label>
         <ion-button
+          class="app-icon-btn"
           slot="end"
           fill="clear"
           (click)="$event.stopPropagation(); removeAttachedFile(doc)"

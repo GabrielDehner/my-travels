@@ -104,6 +104,37 @@
         ></ion-input>
       </ion-item>
 
+      <div class="receipt-picker">
+        <p class="app-text-label receipt-picker__label">{{ 'expenses.receiptPhoto' | translate }}</p>
+        @if (receiptPreviewUrl()) {
+          <div class="receipt-picker__preview">
+            <img class="receipt-picker__img" [src]="receiptPreviewUrl()" alt="" />
+            <ion-button
+              class="receipt-picker__remove"
+              fill="clear"
+              size="small"
+              [attr.aria-label]="'expenses.removeReceipt' | translate"
+              (click)="clearReceiptSelection()"
+            >
+              <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+            </ion-button>
+          </div>
+        } @else {
+          <ion-button fill="outline" (click)="receiptFileInput.click()">
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            {{ 'expenses.receiptPick' | translate }}
+          </ion-button>
+        }
+        <input
+          #receiptFileInput
+          class="app-hidden-file-input"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          (change)="onReceiptFileSelected($event)"
+        />
+      </div>
+
       <ion-button expand="block" [disabled]="saving()" (click)="addExpense()">
         {{ 'expenses.addExpense' | translate }}
       </ion-button>
@@ -133,6 +164,17 @@
                   </h2>
                   <p>{{ expense.date | appDate }} - {{ formatMoney(expense.amount) }}</p>
                 </ion-label>
+                @if (receiptUrls().has(expense.id)) {
+                  <button
+                    type="button"
+                    class="receipt-thumb"
+                    slot="end"
+                    [attr.aria-label]="'expenses.viewReceipt' | translate"
+                    (click)="viewReceipt(expense.id)"
+                  >
+                    <img class="receipt-thumb__img" [src]="receiptUrls().get(expense.id)" alt="" />
+                  </button>
+                }
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option color="danger" (click)="deleteExpense(expense, slidingItem)">

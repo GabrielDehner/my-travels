@@ -56,7 +56,7 @@
         <div class="logistics-card__header">
           <ion-icon name="bed-outline" class="app-category--lodging logistics-icon"></ion-icon>
           <h3>{{ hotel.name }}</h3>
-          <ion-button fill="clear" size="small" (click)="openLodgingMenu($event, hotel)">
+          <ion-button class="app-icon-btn" fill="clear" size="small" (click)="openLodgingMenu($event, hotel)">
             <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
           </ion-button>
         </div>
@@ -118,7 +118,7 @@
             class="app-category--transport logistics-icon"
           ></ion-icon>
           <h3>{{ ticketLabel(transport) }}</h3>
-          <ion-button fill="clear" size="small" (click)="openTicketMenu($event, transport)">
+          <ion-button class="app-icon-btn" fill="clear" size="small" (click)="openTicketMenu($event, transport)">
             <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
           </ion-button>
         </div>

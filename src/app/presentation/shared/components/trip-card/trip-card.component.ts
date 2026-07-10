@@ -67,7 +67,7 @@ export interface TripCardViewModel {
         } @else {
           <span></span>
         }
-        <ion-button fill="clear" size="small" class="trip-card__more" (click)="openMenu($event)">
+        <ion-button fill="clear" size="small" class="trip-card__more app-icon-btn" (click)="openMenu($event)">
           <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
         </ion-button>
       </div>

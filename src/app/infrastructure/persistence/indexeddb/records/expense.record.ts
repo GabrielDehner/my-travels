@@ -17,4 +17,5 @@ export interface ExpenseRecord {
   approxUsd?: Money;
   date: string;
   description?: string;
+  receiptBlobId?: string;
 }

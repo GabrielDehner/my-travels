@@ -23,6 +23,30 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="my-travels" />
     <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+
+    <!--
+      Anti-flash pre-apply of the persisted theme preference, BEFORE Angular
+      bootstraps/renders. `ThemeService` (core/config/theme.service.ts)
+      remains the single source of truth for reading/writing the preference;
+      this script only pre-applies the same `data-theme` attribute using the
+      SAME localStorage key so there is no light->dark flash on reload while
+      Angular loads. Uses the same 'light'/'dark'/'system' semantics as
+      ThemeService (no attribute for 'system', letting `prefers-color-scheme`
+      CSS media queries decide).
+    -->
+    <script>
+      (function () {
+        try {
+          var pref = localStorage.getItem('my-travels:theme-preference');
+          if (pref === 'light' || pref === 'dark') {
+            document.documentElement.setAttribute('data-theme', pref);
+          }
+        } catch (e) {
+          // localStorage may be unavailable (private mode, disabled) — fall
+          // back to no attribute, same as ThemeService's 'system' default.
+        }
+      })();
+    </script>
   </head>
 
   <body>
