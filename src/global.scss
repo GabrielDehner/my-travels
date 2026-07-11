@@ -269,11 +269,36 @@ ion-action-sheet {
  * buttons — those keep their pill shape untouched.
  */
 .app-icon-btn {
-  --border-radius: 50%;
+  /* `!important`: Ionic's icon-only button rule sets a small `--border-radius`
+   * with higher specificity than this class, so without it the chip renders as
+   * a rounded square instead of a circle. */
+  --border-radius: 50% !important;
   --box-shadow: none;
+  /* Visible circular chip: a translucent tint of the current icon color, so it
+   * reads as a round button on both the gradient header (white icons → white
+   * chip) and content surfaces (tinted). `!important` beats Ionic's
+   * `fill="clear"` (`--background: transparent`) from the toolbar default. */
+  --background: color-mix(in srgb, currentColor 16%, transparent) !important;
+  --background-hover: color-mix(in srgb, currentColor 26%, transparent) !important;
+  --background-activated: color-mix(in srgb, currentColor 32%, transparent) !important;
+  --padding-start: 0;
+  --padding-end: 0;
   min-width: 40px;
   min-height: 40px;
+  width: 40px;
+  height: 40px;
   margin: 0;
+}
+
+/* Style the Ionic shadow part directly: forcing a fixed 40x40 square native
+ * element with `border-radius: 50%` guarantees a true circle regardless of the
+ * toolbar's default auto-width button sizing (which made `--border-radius`
+ * render as a rounded rectangle). */
+.app-icon-btn::part(native) {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
 }
 
 /*
@@ -288,6 +313,10 @@ ion-back-button {
   --border-radius: 50%;
   --min-width: 40px;
   --min-height: 40px;
+  /* Same visible circular chip as `.app-icon-btn` (see note there). */
+  --background: color-mix(in srgb, currentColor 16%, transparent);
+  --background-hover: color-mix(in srgb, currentColor 26%, transparent);
+  --background-activated: color-mix(in srgb, currentColor 32%, transparent);
 }
 
 /* --- Chips / badges (task C7) ------------------------------------------ */
